@@ -7,12 +7,13 @@ const options = {
 };
 
 const getCompanyById = async (req, res) => {
-  const { id } = req.params;
+  const id = Number(req.params.id);
   const client = new MongoClient(MONGO_URI, options);
   const db = client.db("Ecommerce");
 
   await client.connect();
-  const result = await db.collection("Companies").findOne({ id: id }).toArray();
+  const result = await db.collection("Companies").findOne({ _id: id });
+
   console.log("result", result);
 
   !result

@@ -1,6 +1,9 @@
 const { MongoClient } = require("mongodb");
+
 require("dotenv").config();
+
 const { MONGO_URI } = process.env;
+
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -12,8 +15,6 @@ const getItems = async (req, res) => {
 
   await client.connect();
   const result = await db.collection("Products").find().toArray();
-
-  console.log("result", result);
 
   //error handling
   !result
