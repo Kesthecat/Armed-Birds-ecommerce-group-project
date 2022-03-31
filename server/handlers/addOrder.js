@@ -13,6 +13,9 @@ const addOrder = async (req, res) => {
   const db = client.db("Ecommerce");
   // need to confirm what will get sent from FE
   const orderBody = req.body;
+
+  //req.body = {products: [{productId, quantity}, {productId, quantity}, ...], firstName, lastName, streetAddress, city, orivince, country, email, creditCard, expiration, postalCode }
+
   const id = uuidv4();
 
   //add id and _id to the order before sending to database
