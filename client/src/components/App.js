@@ -6,7 +6,7 @@ import GlobalStyles from "./GlobalStyles"
 // import Header from "./Header"
 // import Footer from "./Footer"
 // import LandingPage from "./LandingPage"
-// import Shop from "./Shop";
+import ShopPage from "./Shop";
 
 function App() {
 
@@ -22,7 +22,7 @@ function App() {
           </Route>
 
           <Route exact path="/shop">
-            {/* <Shop /> */}
+            <ShopPage />
           </Route>
           
           <Route exact path="/shop/:item">

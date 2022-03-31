@@ -12,7 +12,6 @@ export default createGlobalStyle`
     --color-background: #CAD2C5; //ash grey
     --font-heading: 'Comfortaa', Arial, Helvetica, sans-serif;
     --font-body: 'Nanum Gothic', Arial, Helvetica, sans-serif;
-    --padding-page: 24px;
   }
 
   /* http://meyerweb.com/eric/tools/css/reset/
@@ -67,4 +66,14 @@ export default createGlobalStyle`
   button {
       border: none;
   }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+}
+
+p {
+    font-family: var(--font-body);
+}
+
 `
+
