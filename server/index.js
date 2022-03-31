@@ -35,7 +35,7 @@ express()
   .get("/get-companies", getCompanies)
   .get("/get-company/:id", getCompanyById)
 
-  .post("/addOrder", addOrder)
+  .post("/add-order", addOrder)
 
   .delete("/deleteOrder/:id", deleteOrder)
   // delete one item in an order?
