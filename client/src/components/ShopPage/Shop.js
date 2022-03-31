@@ -1,4 +1,4 @@
-import styled from styledComponents;
+import styled from "styled-components";
 import ProductsListing from "./ProductsListing";
 import PageWrapper from "../PageWrapper";
 

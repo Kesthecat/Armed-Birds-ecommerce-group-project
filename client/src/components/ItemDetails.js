@@ -1,4 +1,4 @@
-import styled from styledComponents;
+import styled from "styled-components";
 import { useContext } from "react";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import PageWrapper from "./PageWrapper"

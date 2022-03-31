@@ -6,7 +6,7 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 // import Footer from "./Footer"
 // import LandingPage from "./LandingPage"
-import ShopPage from "./Shop";
+import ShopPage from "./ShopPage";
 
 function App() {
   return (
