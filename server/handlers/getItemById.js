@@ -7,13 +7,13 @@ const options = {
 };
 
 const getItemById = async (req, res) => {
-  const { id } = req.params;
+  const id = Number(req.params.id);
   const client = new MongoClient(MONGO_URI, options);
   const db = client.db("Ecommerce");
 
   await client.connect();
-  const result = await db.collection("Product").findOne({ id: id }).toArray();
-  console.log("result", result);
+  console.log("connected");
+  const result = await db.collection("Products").findOne({ _id: id });
 
   //handle error
   !result

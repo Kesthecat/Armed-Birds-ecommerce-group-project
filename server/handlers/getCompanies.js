@@ -12,7 +12,6 @@ const getCompanies = async (req, res) => {
 
   await client.connect();
   const result = await db.collection("Companies").find().toArray();
-  console.log("result", result);
 
   //handle error
   !result
