@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import GlobalStyles from "./GlobalStyles"
-// import Header from "./Header"
+import GlobalStyles from "./GlobalStyles";
+import Header from "./Header";
 // import Footer from "./Footer"
 // import LandingPage from "./LandingPage"
 import ShopPage from "./Shop";
 
 function App() {
-
   return (
     <BrowserRouter>
       <GlobalStyles />
-      {/* <Header /> */}
+      <Header />
 
       <Main>
         <Switch>
@@ -24,7 +23,7 @@ function App() {
           <Route exact path="/shop">
             <ShopPage />
           </Route>
-          
+
           <Route exact path="/shop/:item">
             {/* <ItemDetails /> */}
           </Route>
@@ -36,13 +35,11 @@ function App() {
           <Route exact path="/order-confirmation">
             {/* <OrderConfirmation /> */}
           </Route>
-          
-          <Route path="">404: Oops!</Route>
 
+          <Route path="">404: Oops!</Route>
         </Switch>
         {/* <Footer /> */}
       </Main>
-
     </BrowserRouter>
   );
 }
