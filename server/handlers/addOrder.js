@@ -47,57 +47,67 @@ const addOrder = async (req, res) => {
   // console.log("addedId", addedIdOrder);
 
   //BE validation, need to know what's in body
-  if (
-    !firstName ||
-    !lastName ||
-    !streetAddress ||
-    !city ||
-    !province ||
-    !country ||
-    !email ||
-    !creditCard ||
-    !expiration ||
-    !postalCode
-  ) {
-    return res
-      .status(400)
-      .json({ status: 400, data: req.body, message: "Missing info" });
-  }
-
+  // if (
+  //   !firstName ||
+  //   !lastName ||
+  //   !streetAddress ||
+  //   !city ||
+  //   !province ||
+  //   !country ||
+  //   !email ||
+  //   !creditCard ||
+  //   !expiration ||
+  //   !postalCode
+  // ) {
+  //   return res
+  //     .status(400)
+  //     .json({ status: 400, data: req.body, message: "Missing info" });
+  // }
   await client.connect();
-  console.log("connected");
-  const allStockUpdated = [];
 
-  await products.forEach(async (product) => {
-    console.log("inside forEach");
-    //not a number, need to fix that
-    const idNum = Number(product.id);
-    console.log("id", idNum);
-    const itemFromServer = await db
-      .collection("Products")
-      .findOne({ _id: idNum });
-    console.log("from Mongo", itemFromServer);
-    const itemObj = itemFromServer[0];
-    const currentStockNum = itemObj.numInStock;
-    const newStockNum = currentStockNum - product.quantity;
-    const updateStock = await db
-      .collection("Products")
-      .updateOne({ _id: product.id }, { $set: { numInStock: newStockNum } });
-    console.log("update", updateStock);
-  });
+  try {
+    //forEach discard
+    await Promise.all(
+      products.map(async (product) => {
+        // console.log("inside forEach");
+        const idNum = product.productId;
 
-  const result = await db.collection("Orders").insertOne(addedIdOrder);
-  console.log("result", result);
+        // console.log("id", idNum);
+        //returns the object of the product
+        const itemFromServer = await db
+          .collection("Products")
+          .findOne({ _id: idNum });
+        // console.log("from Mongo", itemFromServer);
+        const currentStockNum = itemFromServer.numInStock;
+        console.log("stock", currentStockNum);
+        const newStockNum = currentStockNum - product.quantity;
+        console.log("newStock", newStockNum);
 
-  //handle result of insertOne
-  if (!result.acknowledged) {
-    return res
-      .status(502)
-      .json({ status: 502, data: req.body, message: "Unable to place order" });
+        const updateStock = await db
+          .collection("Products")
+          .updateOne({ _id: idNum }, { $set: { numInStock: 10 } });
+        console.log("update", updateStock);
+      })
+    );
+
+    const result = await db.collection("Orders").insertOne(addedIdOrder);
+    console.log("result", result);
+
+    //handle result of insertOne
+    if (!result.acknowledged) {
+      return res.status(502).json({
+        status: 502,
+        data: req.body,
+        message: "Unable to place order",
+      });
+    }
+
+    res
+      .status(200)
+      .json({ status: 200, data: addedIdOrder, message: "success" });
+  } catch (err) {
+    console.log(err.message);
   }
-
-  res.status(200).json({ status: 200, data: addedIdOrder, message: "success" });
-
   client.close();
 };
 
