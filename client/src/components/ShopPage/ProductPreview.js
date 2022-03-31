@@ -1,4 +1,4 @@
-import styled from styledComponents;
+import styled from "styled-components";
 
 const ProductPreview = ({ imageSrc, name, price }) => {
 

@@ -1,4 +1,4 @@
-import styled from styledComponents;
+import styled from "styled-components";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ProductsContext } from "./ProductsContext";
@@ -8,17 +8,18 @@ const ProductsListing = () => {
 
     const { products } = useContext(ProductsContext);
     
-    return (
-        <Wrapper>
-            {products.map((product) => {
-                return (
-                    <NavLink to={`/shop/${_id}`}>
-                        <ProductPreview key={product._id} name={product.name} price={product.price} />
-                    </NavLink>
-                    )
-            })}
-        </Wrapper>
-    )
+    
+    // return (
+    //     <Wrapper>
+    //         {products.map((product) => {
+    //             return (
+    //                 <NavLink to={`/shop/${_id}`}>
+    //                     <ProductPreview key={product._id} name={product.name} price={product.price} />
+    //                 </NavLink>
+    //                 )
+    //         })}
+    //     </Wrapper>
+    // )
 }
 
 //might be better to use grid layout

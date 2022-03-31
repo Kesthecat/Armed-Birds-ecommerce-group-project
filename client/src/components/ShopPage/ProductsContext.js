@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useEffect } from "react/cjs/react.production.min";
+import { useEffect, useReducer } from "react";
 
 //load products data in context to use in all the Shop / Product Page components
 export const ProductsContext = createContext(null);
@@ -57,10 +57,7 @@ export const ProductsContextProvider = ({children}) => {
         })
     }, [])
 
-    return <ProductsContext.Provider values={{ state: { status, products }}}>
+    return <ProductsContext.Provider value={{ state }}>
         {children}
         </ProductsContext.Provider>
 }
-
-//wrap around App
-

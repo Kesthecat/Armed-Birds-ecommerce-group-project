@@ -1,4 +1,4 @@
-import styledComponents from "styled-components";
+import styled from "styled-components";
 
 //page wrapper with set margins and padding
 
