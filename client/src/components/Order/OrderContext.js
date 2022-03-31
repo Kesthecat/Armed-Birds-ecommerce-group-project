@@ -65,7 +65,7 @@ const reducer = (state, action) => {
 }
 
 
-export const OrderProvider = ({children}) => {
+export const OrderContextProvider = ({children}) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 

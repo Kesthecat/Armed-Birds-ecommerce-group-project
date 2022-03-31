@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import SearchIcon from "@material-ui/icons/Search";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+// import SearchIcon from "@material-ui/icons/Search";
+// import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 
 const Header = () => {
   return (
@@ -10,7 +10,7 @@ const Header = () => {
       <Search>
         <input type="text" />
         <SearchWrapper>
-          <SearchIcon />
+          {/* <SearchIcon /> */}
         </SearchWrapper>
       </Search>
       <HeaderNav>
@@ -18,10 +18,10 @@ const Header = () => {
         <About>About</About>
         <Cart>
           {" "}
-          <ShoppingBasketIcon />
+          {/* <ShoppingBasketIcon /> */}
         </Cart>
         <BasketWrapper>
-          <ShoppingBasketIcon />
+          {/* <ShoppingBasketIcon /> */}
           <span>0</span>
         </BasketWrapper>
       </HeaderNav>

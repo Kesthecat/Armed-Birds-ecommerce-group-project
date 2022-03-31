@@ -44,4 +44,6 @@ function App() {
   );
 }
 
+const Main = styled.div`
+`
 export default App;
