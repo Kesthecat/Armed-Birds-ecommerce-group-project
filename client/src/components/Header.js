@@ -1,9 +1,19 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom"
+import { OrderContext } from "./Order/OrderContext";
+
 // import SearchIcon from "@material-ui/icons/Search";
 // import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 
 const Header = () => {
+
+  const { displayModal, setDisplayModal } = useContext(OrderContext);
+
+  const handleClick = () => {
+    setDisplayModal(true);
+  }
+
   return (
     <HeaderContauner>
       <h1>Logo</h1>
@@ -14,10 +24,10 @@ const Header = () => {
         </SearchWrapper>
       </Search>
       <HeaderNav>
-        <Shop>Shop</Shop>
+        <Shop><NavLink to="/shop">Shop</NavLink></Shop>
         <About>About</About>
-        <Cart>
-          {" "}
+        <Cart onClick={handleClick}>
+          Cart
           {/* <ShoppingBasketIcon /> */}
         </Cart>
         <BasketWrapper>
@@ -81,6 +91,7 @@ const Shop = styled.div`
   margin-left: 10px;
   margin-right: 10px;
   color: white;
+
 `;
 
 const About = styled.div`

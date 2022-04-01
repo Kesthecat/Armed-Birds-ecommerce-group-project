@@ -7,6 +7,9 @@ const PageWrapper = ({children}) => {
 }
 
 const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 50px;
 `
 export default PageWrapper;

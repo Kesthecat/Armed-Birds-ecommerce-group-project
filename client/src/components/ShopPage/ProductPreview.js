@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+
+//product preview card, part of the product listing grid on the shop page
 const ProductPreview = ({ imageSrc, name, price }) => {
 
     return (
@@ -18,16 +20,24 @@ const ProductPreview = ({ imageSrc, name, price }) => {
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     padding: 15px;
-    width: 250px;
-    height: 325px;
+    width: 300px;
+    height: 400px;
     background-color: var(--color-background); 
     border-radius: 5px;
 `
 const ImgDiv = styled.div`
     display: flex;
+    align-items: center;
     justify-content: center;
+    background-color: white;
+    height: 200px;
+    margin: 15px;
+    border-radius: 10px;
+
+    img {
+        height: 160px;
+    }
 `
 
 const Info = styled.div`
@@ -38,10 +48,11 @@ const Info = styled.div`
     color: var(--color-main);
 `
 
-const Name = styled.h3`
+const Name = styled.h4`
     font-weight: bold;
     text-align: center;
     margin: 20px 0 0 0;
+    line-height: 1.3;
     
 `
 

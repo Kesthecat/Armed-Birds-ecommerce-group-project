@@ -8,33 +8,37 @@ import Header from "./Header";
 // import LandingPage from "./LandingPage"
 import ShopPage from "./ShopPage";
 import ItemDetails from "./ItemDetails";
+import CartModal from "./Order/CartModal";
+import Checkout from "./Order/Checkout";
+import Confirmation from "./Order/Confirmation";
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyles />
       <Header />
-
       <Main>
+      <CartModal />
+     
         <Switch>
           <Route exact path="/">
             {/* <LandingPage /> */}
+          </Route>
+
+          <Route exact path="/shop/:id">
+            <ItemDetails />
           </Route>
 
           <Route exact path="/shop">
             <ShopPage />
           </Route>
 
-          <Route exact path="/shop/:item">
-            <ItemDetails />
-          </Route>
-
           <Route exact path="/checkout">
-            {/* <Checkout /> */}
+            <Checkout />
           </Route>
 
-          <Route exact path="/order-confirmation">
-            {/* <OrderConfirmation /> */}
+          <Route exact path="/confirmation">
+            <Confirmation />
           </Route>
 
           <Route path="">404: Oops!</Route>
@@ -46,6 +50,7 @@ function App() {
 }
 
 const Main = styled.div`
+  position: relative;
 `
 
 export default App;

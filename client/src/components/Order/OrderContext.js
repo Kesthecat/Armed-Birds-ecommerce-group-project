@@ -27,12 +27,12 @@ const reducer = (state, action) => {
                 itemsToPurchase: action.selectedItems, 
             };
         }
-        case ("cancel-order-process"): { //CANCEL BUTTON on checkout page
+        case ("cancel-order-process"): { //for CANCEL BUTTON on checkout page
             return {
                 ...initialState
             }
         }
-        case ("order-processing"): { //we can have a spinner on the button etc
+        case ("order-processing"): { //can use for spinner on the checkout button etc
             return {
                 ...state,
                 status: "awaiting-response",
@@ -73,6 +73,9 @@ export const OrderContextProvider = ({children}) => {
     //stored in session storage
     //has shape [{_id, name, price, quantity}]
     const [selectedItems, setSelectedItems] = usePersistedState([], "current-cart");
+
+    //state to indicate whether to display Cart Modal or not
+    const [displayModal, setDisplayModal] = useState(false);
 
     const beginOrderProcess = () => {
         dispatch({
@@ -129,6 +132,7 @@ export const OrderContextProvider = ({children}) => {
                     afterPurchaseReset,
                 },
                 selectedItems, setSelectedItems,
+                displayModal, setDisplayModal
             }}
             >{children}
         </OrderContext.Provider>

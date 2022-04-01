@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-const Dropdown = ({array, label, handleSelect}) => {
+//dropdown menu component, used for the quantity dropdown on the ItemDetails page
+const Dropdown = ({array, label, stateSetter}) => {
+
+    const handleSelect = (e) => { 
+        stateSetter(e.target.value); 
+    }
 
     return (
         <Wrapper>

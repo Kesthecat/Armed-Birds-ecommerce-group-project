@@ -38,9 +38,9 @@ export const ProductsContextProvider = ({children}) => {
   
         fetch("/get-items", { 
             method: "GET", 
-            // headers: {
-            //     "Content-Type": "application/json"
-            // },
+            headers: {
+                "Content-Type": "application/json"
+            },
         })
         .then(res => res.json())
         .then((data) => {
