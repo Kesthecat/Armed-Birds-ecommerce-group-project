@@ -5,13 +5,15 @@ import { createGlobalStyle } from "styled-components";
 //grey with slight violet tinge #DAE0F2
 //pewter blue - #85AAC1
 //light brown - #A99985
+//667761 deep sage
 export default createGlobalStyle`
   :root {
     --color-main: #50479A; // dark slate blue
     --color-secondary: 	#84A98C; //dark sea green
     --color-background: #DAE0F2; 
     --color-text: #555555; //dark gray
-    --font-heading: 'Comfortaa', Arial, Helvetica, sans-serif;
+    --font-heading: 'Quicksand', Arial, Helvetica, sans-serif;
+    --font-subheading: 'Poppins', Arial, Helvetica, sans-serif;
     --font-body: 'Nanum Gothic', Arial, Helvetica, sans-serif;
   }
 
@@ -66,14 +68,41 @@ export default createGlobalStyle`
   }
   button {
       border: none;
+      color: white;
+      background-color: var(--color-main);
   }
 
-  h1, h2, h3, h4, h5 {
+  h1, h2 {
     font-family: var(--font-heading);
+}
+h3, h4, h5 {
+    font-family: var(--font-subheading);
+}
+
+p, span {
+    font-family: var(--font-body);
+}
+
+h1 {
+    font-size: 50px;
+    font-weight: bold;
+    color: var(--color-main);
+}
+
+h2 {
+    font-size: 36px;
+}
+
+h3 { 
+    font-size: 20px;
+}
+
+h4 { 
+    font-size: 18px;
 }
 
 p {
-    font-family: var(--font-body);
+    font-size: 16px;
 }
 
 `

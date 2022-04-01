@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { ProductsContext } from "./ProductsContext";
 import ProductPreview from "./ProductPreview";
 
+//grid of all the product preview cards, on the shop page
 const ProductsListing = () => {
 
     const { state: { status, products } } = useContext(ProductsContext);
@@ -15,7 +16,7 @@ const ProductsListing = () => {
             <>
             {products.map((product) => {
                 return (
-                    <NavLink to={`/shop/${products._id}`}>
+                    <NavLink to={`/shop/${product._id}`}>
                         <ProductPreview key={product._id} imageSrc={product.imageSrc} name={product.name} price={product.price} />
                     </NavLink>
                     )
@@ -31,8 +32,9 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    row-gap: 25px;
-    column-gap: 25px;
+    row-gap: 30px;
+    column-gap: 30px;
+    padding: 50px;
 `
 
 export default ProductsListing;
