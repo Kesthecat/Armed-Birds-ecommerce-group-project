@@ -6,25 +6,30 @@ import ProductPreview from "./ProductPreview";
 
 const ProductsListing = () => {
 
-    const { products } = useContext(ProductsContext);
+    const { state: { status, products } } = useContext(ProductsContext);
     
     
-    // return (
-    //     <Wrapper>
-    //         {products.map((product) => {
-    //             return (
-    //                 <NavLink to={`/shop/${_id}`}>
-    //                     <ProductPreview key={product._id} name={product.name} price={product.price} />
-    //                 </NavLink>
-    //                 )
-    //         })}
-    //     </Wrapper>
-    // )
+    return (
+        <Wrapper>
+            {( status === "idle" &&
+            <>
+            {products.map((product) => {
+                return (
+                    <NavLink to={`/shop/${products._id}`}>
+                        <ProductPreview key={product._id} imageSrc={product.imageSrc} name={product.name} price={product.price} />
+                    </NavLink>
+                    )
+            })}
+            </>
+            )}
+        </Wrapper>
+    )
 }
 
 //might be better to use grid layout
 const Wrapper = styled.div`
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     row-gap: 25px;
     column-gap: 25px;

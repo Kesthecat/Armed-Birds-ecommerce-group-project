@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 const Dropdown = ({array, label, handleSelect}) => {
 
     return (
@@ -14,7 +16,8 @@ const Dropdown = ({array, label, handleSelect}) => {
         </Wrapper>
     )
 
-
 }
 
+const Wrapper = styled.div`
+`
 export default Dropdown;

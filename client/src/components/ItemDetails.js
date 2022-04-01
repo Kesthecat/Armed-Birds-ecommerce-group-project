@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useContext } from "react";
 import { NavLink, useHistory, useParams } from "react-router-dom";
 import PageWrapper from "./PageWrapper"
-import { ProductsContext } from "./ProductsContext";
+import { ProductsContext } from "./ShopPage/ProductsContext";
 import Dropdown from "./ShopPage/Dropdown";
 
 const ItemDetails = () => {
@@ -19,13 +19,13 @@ const ItemDetails = () => {
                     <img />
                 </ImgDiv>
                 <InfoDiv>
-                    <ProductName></ProductName>
-                    <Company></Company>
-                    <Price></Price>
+                    <ProductName>Name</ProductName>
+                    <Company>Company</Company>
+                    <Price>Price</Price>
                     <Description>Wear it on your (bodypart)!</Description>
-                    <InStock></InStock>
+                    <InStock>In stock</InStock>
                     <Dropdown />
-                    <BuyButton></BuyButton>
+                    <BuyButton>BUY</BuyButton>
                 </InfoDiv>
             </ProductCard>
         </PageWrapper>
@@ -34,6 +34,12 @@ const ItemDetails = () => {
 }
 
 const ProductCard = styled.div`
+`
+
+const ImgDiv = styled.div`
+`
+
+const InfoDiv = styled.div`
 `
 
 const ProductName = styled.h1`

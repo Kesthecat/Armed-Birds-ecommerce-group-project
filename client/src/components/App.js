@@ -7,6 +7,7 @@ import Header from "./Header";
 // import Footer from "./Footer"
 // import LandingPage from "./LandingPage"
 import ShopPage from "./ShopPage";
+import ItemDetails from "./ItemDetails";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
           </Route>
 
           <Route exact path="/shop/:item">
-            {/* <ItemDetails /> */}
+            <ItemDetails />
           </Route>
 
           <Route exact path="/checkout">
@@ -46,4 +47,5 @@ function App() {
 
 const Main = styled.div`
 `
+
 export default App;
