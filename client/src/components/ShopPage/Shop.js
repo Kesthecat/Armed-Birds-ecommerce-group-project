@@ -7,8 +7,7 @@ const Shop = () => {
     return (
         <PageWrapper>
             <PageTitle>SHOP</PageTitle>
-            {/* shop page banner
-                side bar with filters */}
+            {/* side bar with filters */}
             <ProductsListing />
         </PageWrapper>
     )

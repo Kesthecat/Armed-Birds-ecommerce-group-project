@@ -18,7 +18,7 @@ const reducer = (state, action) => {
             return {
                 ...state, 
                 status: "idle",
-               item: action.item,
+                item: action.item,
             }
         }
         case ("error-fetching-item-from-server") : {
@@ -45,12 +45,13 @@ const ItemDetails = () => {
     //state and loading of item details
     const [ state, dispatch ] = useReducer(reducer, initialState);
     
-    const { id } = useParams(); //hook error coming from useParams
+    // const { id } = useParams(); //hook error coming from useParams
 
     const dropdownArray = [];
 
     useEffect(() => {
-        fetch(`/get-item/${id}`, { 
+        fetch(`/get-item/6553`, { 
+        // fetch(`/get-item/${id}`, { 
             method: "GET", 
             headers: {
                 "Content-Type": "application/json"
@@ -62,7 +63,7 @@ const ItemDetails = () => {
             console.log("fetch item data", data, data.data)
             dispatch ({
                 type: "item-loaded-from-server", 
-                products: data.data //verify what is being sent by server
+                item: data.data //verify what is being sent by server
             })
             
         })
@@ -76,6 +77,7 @@ const ItemDetails = () => {
 
     //populating number array for the quantity dropdown
     if (state.status === "idle") {
+        console.log("state.item.numInStock", state.item.numInStock)
         for (let i = 0; i < state.item.numInStock; i++) {
             dropdownArray[i] = i+1;
         }
@@ -91,11 +93,14 @@ const ItemDetails = () => {
             quantity: quantity
         }
         setSelectedItems([...selectedItems, currentItem]);
+
+        //set modal to true
+        //history.push to shop page
     }
 
     return (
         <PageWrapper>
-            <NavLink to="/shop">BACK TO SHOP</NavLink>
+            {/* <NavLink to="/shop">BACK TO SHOP</NavLink> */}
             {( state.status === "idle" && 
             <ProductCard>
                 <ImgDiv>
@@ -103,7 +108,7 @@ const ItemDetails = () => {
                 </ImgDiv>
                 <InfoDiv>
                     <ProductName>{state.item.name}</ProductName>
-                    <Company>Company (have to do fetch to get this by id)</Company>
+                    {/* <Company>{state.item.company}</Company> */}
                     <Price>{state.item.price}</Price>
                     <Description>Wear it on your {state.item.body_location}!</Description>
                     
@@ -136,10 +141,11 @@ const InfoDiv = styled.div`
     }
 `
 
-const ProductName = styled.h1`
+const ProductName = styled.h2`
 `
 
-const Company = styled(NavLink)`
+//make this a NavLink later
+const Company = styled.h3`
 `
 
 const Price = styled.h4`
