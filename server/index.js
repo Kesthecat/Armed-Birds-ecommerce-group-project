@@ -37,7 +37,7 @@ express()
 
   .post("/add-order", addOrder)
 
-  .delete("/deleteOrder/:id", deleteOrder)
+  .delete("/delete-order/:id", deleteOrder)
   // delete one item in an order?
 
   .put("/modify-order/:id")
