@@ -9,7 +9,8 @@ export default createGlobalStyle`
   :root {
     --color-main: #50479A; // dark slate blue
     --color-secondary: 	#84A98C; //dark sea green
-    --color-background: #CAD2C5; //ash grey
+    --color-background: #DAE0F2; 
+    --color-text: #555555; //dark gray
     --font-heading: 'Comfortaa', Arial, Helvetica, sans-serif;
     --font-body: 'Nanum Gothic', Arial, Helvetica, sans-serif;
   }
