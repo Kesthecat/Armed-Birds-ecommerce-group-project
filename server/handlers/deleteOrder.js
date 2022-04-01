@@ -8,21 +8,58 @@ const options = {
 
 const deleteOrder = async (req, res) => {
   const { id } = req.params;
-  const body = req.body;
 
   const client = new MongoClient(MONGO_URI, options);
   const db = client.db("Ecommerce");
+  try {
+    await client.connect();
 
-  await client.connect();
-  const result = await db.collection("Orders").deleteOne({ _id: id });
-  console.log("result", result);
+    const order = await db.collection("Orders").findOne({ _id: id });
 
-  //error handling
-  !result.deletedCount === 0
-    ? res
-        .status(400)
-        .json({ status: 400, data: id, message: "unable to delete" })
-    : res.status(200).json({ status: 200, data: id, message: "success" });
+    const productArr = order.products;
+
+    await Promise.all(
+      productArr.map(async (product) => {
+        // console.log("product", product);
+        //access the info of the product so we can set the new stock num
+        const idNum = product.productId;
+        console.log("id", idNum);
+        const itemFromServer = await db
+          .collection("Products")
+          .findOne({ _id: idNum });
+        const currentStockNum = itemFromServer.numInStock;
+        const newStockNum = currentStockNum + Number(product.quantity);
+        console.log("newStockNum", newStockNum);
+
+        // make the stock update of the product
+        const updateStock = await db
+          .collection("Products")
+          .updateOne({ _id: idNum }, { $set: { numInStock: newStockNum } });
+        console.log("update", updateStock);
+
+        // the update is not successfull
+        if (updateStock.modifiedCount === 0) {
+          cannotUpdate.push({
+            message: `Cannot update stock of product ${itemFromServer.name}`,
+            productId: idNum,
+          });
+          return;
+          //
+        }
+      })
+    );
+    const result = await db.collection("Orders").deleteOne({ _id: id });
+    console.log("result", result);
+
+    //error handling
+    result.deletedCount === 0
+      ? res
+          .status(400)
+          .json({ status: 400, data: id, message: "unable to delete" })
+      : res.status(200).json({ status: 200, data: id, message: "success" });
+  } catch (err) {
+    console.log("Error: ", err.message);
+  }
   client.close();
 };
 

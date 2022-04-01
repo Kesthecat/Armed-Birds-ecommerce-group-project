@@ -135,7 +135,7 @@ const addOrder = async (req, res) => {
           .collection("Products")
           .findOne({ _id: idNum });
         const currentStockNum = itemFromServer.numInStock;
-        const newStockNum = currentStockNum - productId.quantity;
+        const newStockNum = currentStockNum - product.quantity;
         console.log("newStocNumk", newStockNum);
 
         // make the stock update of the product
