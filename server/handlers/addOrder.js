@@ -25,7 +25,6 @@ const addOrder = async (req, res) => {
     expiration,
     postalCode,
   } = req.body;
-  // console.log("body", req.body);
   const id = uuidv4();
 
   //add id and _id to the order before sending to database
@@ -42,7 +41,6 @@ const addOrder = async (req, res) => {
     postalCode: postalCode,
     _id: id,
   };
-  // console.log("addedId", addedIdOrder);
 
   await client.connect();
 
@@ -54,21 +52,16 @@ const addOrder = async (req, res) => {
     //map keeps the Promises so all await are called and all elements goes trough the loop. Promise.all also forces the promises to be used.
     await Promise.all(
       products.map(async (product) => {
-        // console.log("product", product);
         const idNum = product.productId;
-        // console.log("id", idNum);
 
         //returns the object of the product
         const itemFromServer = await db
           .collection("Products")
           .findOne({ _id: idNum });
-        // console.log("from Mongo", itemFromServer);
         const currentStockNum = itemFromServer.numInStock;
-        // console.log("stock", currentStockNum);
 
         //if not out of stock then
         const newStockNum = currentStockNum - product.quantity;
-        // console.log("newStock", newStockNum);
 
         //handle whether there is enough in stock for the order
         //don't need this if max ordering quatitty dealt with in the FE
@@ -83,7 +76,7 @@ const addOrder = async (req, res) => {
     );
 
     //---------------------STOCK CHECKPOINT-----------------------------------------
-    // console.log("cannotBuy", cannotBuy);
+
     //stop the purchase if one product does not have enough stock
     if (cannotBuy.length > 0) {
       return res.status(400).json({
@@ -99,22 +92,19 @@ const addOrder = async (req, res) => {
     let cannotUpdate = [];
     await Promise.all(
       products.map(async (product) => {
-        // console.log("product", product);
         //access the info of the product so we can set the new stock num
         const idNum = product.productId;
-        // console.log("id", idNum);
+
         const itemFromServer = await db
           .collection("Products")
           .findOne({ _id: idNum });
         const currentStockNum = itemFromServer.numInStock;
         const newStockNum = currentStockNum - product.quantity;
-        // console.log("newStocNumk", newStockNum);
 
         // make the stock update of the product
         const updateStock = await db
           .collection("Products")
           .updateOne({ _id: idNum }, { $set: { numInStock: newStockNum } });
-        // console.log("update", updateStock);
 
         // the update is not successfull
         if (updateStock.modifiedCount === 0) {
@@ -128,7 +118,6 @@ const addOrder = async (req, res) => {
       })
     );
     //---------------------------------- VERIFY UPDATE PROBLEM CHECKPOINT ----------------------------
-    // console.log("cannotUpdate", cannotUpdate);
     ///this is just for admin stock update handling.....
     if (cannotUpdate.length > 0) {
       return res.status(400).json({
@@ -141,7 +130,6 @@ const addOrder = async (req, res) => {
 
     //if pass all the stock check and updating the stock num,  POST the order
     const result = await db.collection("Orders").insertOne(addedIdOrder);
-    // console.log("result", result);
 
     //---------------------VERIFY ADDING ORDER ISSUES CHECKPOINT-----------------------------
     // handle result of insertOne
