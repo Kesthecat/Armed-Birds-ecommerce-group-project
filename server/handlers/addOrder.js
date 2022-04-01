@@ -89,7 +89,7 @@ const addOrder = async (req, res) => {
         }
       })
     );
-
+    console.log("cannotBuy", cannotBuy);
     //stop the purchase if one product does not have enough stock
     if (cannotBuy.length > 0) {
       return res.status(400).json({
@@ -126,26 +126,29 @@ const addOrder = async (req, res) => {
     //update the quantity for product in stock
     let cannotUpdate = [];
     await Promise.all(
-      canBuyProducts.map(async (productId) => {
+      products.map(async (product) => {
+        // console.log("product", product);
         //access the info of the product so we can set the new stock num
-        // console.log("id", productId);
+        const idNum = product.productId;
+        // console.log("id", idNum);
         const itemFromServer = await db
           .collection("Products")
-          .findOne({ _id: productId });
+          .findOne({ _id: idNum });
         const currentStockNum = itemFromServer.numInStock;
         const newStockNum = currentStockNum - productId.quantity;
+        console.log("newStocNumk", newStockNum);
 
         // make the stock update of the product
         const updateStock = await db
           .collection("Products")
-          .updateOne({ _id: productId }, { $set: { numInStock: newStockNum } });
+          .updateOne({ _id: idNum }, { $set: { numInStock: newStockNum } });
         // console.log("update", updateStock);
 
         // the update is not successfull
         if (updateStock.modifiedCount === 0) {
           cannotUpdate.push({
             message: `Cannot update stock of product ${itemFromServer.name}`,
-            productId: productId,
+            productId: idNum,
           });
           return;
           //
