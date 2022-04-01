@@ -32,7 +32,7 @@ const addOrder = async (req, res) => {
   const addedIdOrder = {
     products: products,
     name: `${firstName} ${lastName}`,
-    strettAddress: streetAddress,
+    streetAddress: streetAddress,
     city: city,
     province: province,
     country: country,
@@ -40,7 +40,6 @@ const addOrder = async (req, res) => {
     creditCard: creditCard,
     expiration: expiration,
     postalCode: postalCode,
-    id: id,
     _id: id,
   };
   // console.log("addedId", addedIdOrder);
@@ -67,13 +66,13 @@ const addOrder = async (req, res) => {
         // console.log("stock", currentStockNum);
 
         // handle whether the product is out of stock
-        if (!currentStockNum) {
-          cannotBuy.push({
-            message: `${itemFromServer.name} is out of stock.`,
-            productId: itemFromServer._id,
-          });
-          return;
-        }
+        // if (!currentStockNum) {
+        //   cannotBuy.push({
+        //     message: `${itemFromServer.name} is out of stock.`,
+        //     productId: itemFromServer._id,
+        //   });
+        //   return;
+        // }
 
         //if not out of stock then
         const newStockNum = currentStockNum - product.quantity;
@@ -96,30 +95,32 @@ const addOrder = async (req, res) => {
       return res.status(400).json({
         status: 400,
         data: cannotBuy,
-        message: "Not enough stock. See data for details.",
+        message:
+          "Not enough stock. See data for details to know which product(s).",
       });
     }
+
     //update the stock only if product are in stock
     //data would contain info on which product is out of stock or not enough
 
     //make a list of productIds that cannot be purchased
     // console.log("cannotBuy", cannotBuy);
-    const cannotBuyId = [];
-    cannotBuy.forEach((item) => {
-      cannotBuyId.push(item.productId);
-    });
-    // console.log("cannotBuyId", cannotBuy);
+    // const cannotBuyId = [];
+    // cannotBuy.forEach((item) => {
+    //   cannotBuyId.push(item.productId);
+    // });
+    // // console.log("cannotBuyId", cannotBuy);
 
-    //make an array of all the products that can be purchased
-    let canBuyProductsWithUndefined = [];
-    products.forEach((product) => {
-      const canBuy = cannotBuyId.find((item) => item !== product.productId);
-      canBuyProductsWithUndefined.push(canBuy);
-    });
-    // console.log("undefined", canBuyProductsWithUndefined);
-    const canBuyProducts = canBuyProductsWithUndefined.filter(
-      (item) => item !== undefined
-    );
+    // //make an array of all the products that can be purchased
+    // let canBuyProductsWithUndefined = [];
+    // products.forEach((product) => {
+    //   const canBuy = cannotBuyId.find((item) => item !== product.productId);
+    //   canBuyProductsWithUndefined.push(canBuy);
+    // });
+    // // console.log("undefined", canBuyProductsWithUndefined);
+    // const canBuyProducts = canBuyProductsWithUndefined.filter(
+    //   (item) => item !== undefined
+    // );
     // console.log("clean", canBuyProducts);
 
     //update the quantity for product in stock
@@ -153,6 +154,7 @@ const addOrder = async (req, res) => {
     );
 
     console.log("cannotUpdate", cannotUpdate);
+    ///this is just for admin stock update handling.....
     if (cannotUpdate.length > 0) {
       return res.status(400).json({
         status: 400,
