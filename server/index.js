@@ -8,6 +8,8 @@ const { getCompanies } = require("./handlers/getCompanies");
 const { getCompanyById } = require("./handlers/getCompanyById");
 const { getItemById } = require("./handlers/getItemById");
 const { getItems } = require("./handlers/getItems");
+const { getOrders } = require("./handlers/getOrders");
+const { getOrderById } = require("./handlers/getOrderById");
 
 const PORT = 4000;
 
@@ -34,7 +36,8 @@ express()
   .get("/get-item/:id", getItemById)
   .get("/get-companies", getCompanies)
   .get("/get-company/:id", getCompanyById)
-
+  .get("/get-orders", getOrders)
+  .get("/get-order/:id", getOrderById)
   .post("/add-order", addOrder)
 
   .delete("/delete-order/:id", deleteOrder)
