@@ -48,6 +48,7 @@ const addOrder = async (req, res) => {
 
   let cannotBuy = [];
 
+  //---------------VERIFIES IF PRODUCT IS IN STOCK OR ENOUGH STOCK --------------------------
   try {
     //forEach discard the Promise so the it breaks the async function. so the 2nd await will not work
     //map keeps the Promises so all await are called and all elements goes trough the loop. Promise.all also forces the promises to be used.
@@ -65,15 +66,6 @@ const addOrder = async (req, res) => {
         const currentStockNum = itemFromServer.numInStock;
         // console.log("stock", currentStockNum);
 
-        // handle whether the product is out of stock
-        // if (!currentStockNum) {
-        //   cannotBuy.push({
-        //     message: `${itemFromServer.name} is out of stock.`,
-        //     productId: itemFromServer._id,
-        //   });
-        //   return;
-        // }
-
         //if not out of stock then
         const newStockNum = currentStockNum - product.quantity;
         // console.log("newStock", newStockNum);
@@ -89,7 +81,9 @@ const addOrder = async (req, res) => {
         }
       })
     );
-    console.log("cannotBuy", cannotBuy);
+
+    //---------------------STOCK CHECKPOINT-----------------------------------------
+    // console.log("cannotBuy", cannotBuy);
     //stop the purchase if one product does not have enough stock
     if (cannotBuy.length > 0) {
       return res.status(400).json({
@@ -99,29 +93,7 @@ const addOrder = async (req, res) => {
           "Not enough stock. See data for details to know which product(s).",
       });
     }
-
-    //update the stock only if product are in stock
-    //data would contain info on which product is out of stock or not enough
-
-    //make a list of productIds that cannot be purchased
-    // console.log("cannotBuy", cannotBuy);
-    // const cannotBuyId = [];
-    // cannotBuy.forEach((item) => {
-    //   cannotBuyId.push(item.productId);
-    // });
-    // // console.log("cannotBuyId", cannotBuy);
-
-    // //make an array of all the products that can be purchased
-    // let canBuyProductsWithUndefined = [];
-    // products.forEach((product) => {
-    //   const canBuy = cannotBuyId.find((item) => item !== product.productId);
-    //   canBuyProductsWithUndefined.push(canBuy);
-    // });
-    // // console.log("undefined", canBuyProductsWithUndefined);
-    // const canBuyProducts = canBuyProductsWithUndefined.filter(
-    //   (item) => item !== undefined
-    // );
-    // console.log("clean", canBuyProducts);
+    //----------------------PASSED STOCK CHECKPOINT---------------------------------------------
 
     //update the quantity for product in stock
     let cannotUpdate = [];
@@ -135,8 +107,8 @@ const addOrder = async (req, res) => {
           .collection("Products")
           .findOne({ _id: idNum });
         const currentStockNum = itemFromServer.numInStock;
-        const newStockNum = currentStockNum - productId.quantity;
-        console.log("newStocNumk", newStockNum);
+        const newStockNum = currentStockNum - product.quantity;
+        // console.log("newStocNumk", newStockNum);
 
         // make the stock update of the product
         const updateStock = await db
@@ -155,8 +127,8 @@ const addOrder = async (req, res) => {
         }
       })
     );
-
-    console.log("cannotUpdate", cannotUpdate);
+    //---------------------------------- VERIFY UPDATE PROBLEM CHECKPOINT ----------------------------
+    // console.log("cannotUpdate", cannotUpdate);
     ///this is just for admin stock update handling.....
     if (cannotUpdate.length > 0) {
       return res.status(400).json({
@@ -165,11 +137,13 @@ const addOrder = async (req, res) => {
         message: "Cannot update stock. See data for details.",
       });
     }
+    //------------------------PASS UPDATE CHECKPOINT --------------------------------------
 
     //if pass all the stock check and updating the stock num,  POST the order
     const result = await db.collection("Orders").insertOne(addedIdOrder);
-    console.log("result", result);
+    // console.log("result", result);
 
+    //---------------------VERIFY ADDING ORDER ISSUES CHECKPOINT-----------------------------
     // handle result of insertOne
     if (!result.acknowledged) {
       return res.status(502).json({
