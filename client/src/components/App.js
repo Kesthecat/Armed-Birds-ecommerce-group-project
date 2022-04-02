@@ -11,6 +11,7 @@ import ItemDetails from "./ItemDetails";
 import CartModal from "./Order/CartModal";
 import Checkout from "./Order/Checkout";
 import Confirmation from "./Order/Confirmation";
+import Errorpage from "./Errorpage";
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
       <GlobalStyles />
       <Header />
       <Main>
-      <CartModal />
-     
+        <CartModal />
+
         <Switch>
           <Route exact path="/">
             {/* <LandingPage /> */}
@@ -41,7 +42,10 @@ function App() {
             <Confirmation />
           </Route>
 
-          <Route path="">404: Oops!</Route>
+          <Route path="/errorpage">
+            <Errorpage />
+            {/* 404: Oops! */}
+          </Route>
         </Switch>
         {/* <Footer /> */}
       </Main>
@@ -51,6 +55,6 @@ function App() {
 
 const Main = styled.div`
   position: relative;
-`
+`;
 
 export default App;

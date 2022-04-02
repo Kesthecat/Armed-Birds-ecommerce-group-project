@@ -1,18 +1,20 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
 import { OrderContext } from "./Order/OrderContext";
+import { AiOutlineSearch } from "react-icons/ai";
+import { BsSearch } from "react-icons/bs";
+import { MdOutlineShoppingBasket } from "react-icons/md";
 
 // import SearchIcon from "@material-ui/icons/Search";
 // import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 
 const Header = () => {
-
   const { displayModal, setDisplayModal } = useContext(OrderContext);
 
   const handleClick = () => {
     setDisplayModal(true);
-  }
+  };
 
   return (
     <HeaderContauner>
@@ -20,20 +22,38 @@ const Header = () => {
       <Search>
         <input type="text" />
         <SearchWrapper>
-          {/* <SearchIcon /> */}
+          <BsSearch />
         </SearchWrapper>
       </Search>
       <HeaderNav>
-        <Shop><NavLink to="/shop">Shop</NavLink></Shop>
-        <About>About</About>
+        <Shop>
+          <NavLink
+            activeClassName="active"
+            activeStyle={{ color: "teal" }}
+            color="white"
+            to="/shop"
+          >
+            Shop
+          </NavLink>
+        </Shop>
+
+        <About>
+          <NavLink
+            activeClassName="active"
+            activeStyle={{ color: "teal" }}
+            color="white"
+            to="/about"
+          >
+            About{" "}
+          </NavLink>
+        </About>
+
         <Cart onClick={handleClick}>
-          Cart
-          {/* <ShoppingBasketIcon /> */}
+          Cart<span>0</span>
         </Cart>
-        <BasketWrapper>
-          {/* <ShoppingBasketIcon /> */}
-          <span>0</span>
-        </BasketWrapper>
+        {/* <BasketWrapper onClick={handleClick}>
+          <MdOutlineShoppingBasket size="16px" />
+        </BasketWrapper> */}
       </HeaderNav>
     </HeaderContauner>
   );
@@ -45,7 +65,7 @@ const HeaderContauner = styled.div`
   height: 80px;
   display: flex;
   align-items: center;
-  background-color: #131921;
+  background-color: var(--color-main);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -65,6 +85,7 @@ const Search = styled.div`
   flex: 1;
   align-items: center;
   border-radius: 24px;
+  height: 14px;
 
   input {
     height: 12px;
@@ -75,14 +96,15 @@ const Search = styled.div`
 `;
 
 const SearchWrapper = styled.div`
-  padding: 5px;
-  height: 22px !important;
+  padding: 8px;
+  height: 32px !important;
   background-color: #cd9042;
 `;
 
 const HeaderNav = styled.div`
   display: flex;
   justify-content: space-evenly;
+  padding-right: 20px;
 `;
 
 const Shop = styled.div`
@@ -91,7 +113,6 @@ const Shop = styled.div`
   margin-left: 10px;
   margin-right: 10px;
   color: white;
-
 `;
 
 const About = styled.div`
@@ -99,15 +120,18 @@ const About = styled.div`
 
   margin-left: 10px;
   margin-right: 10px;
-  color: white;
 `;
 
 const Cart = styled.div`
   display: flex;
-  flex-direction: column;
+
   margin-left: 10px;
   margin-right: 10px;
   color: white;
+
+  span {
+    padding-left: 5px;
+  }
 `;
 
 const BasketWrapper = styled.div`
@@ -120,3 +144,4 @@ const BasketWrapper = styled.div`
     margin-right: 10px;
   }
 `;
+// const NavLink = styled.link``;

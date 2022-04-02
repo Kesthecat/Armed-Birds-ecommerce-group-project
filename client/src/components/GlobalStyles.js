@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 
-
 //some colours - navy purple #645986
 //grey with slight violet tinge #DAE0F2
 //pewter blue - #85AAC1
@@ -105,5 +104,4 @@ p {
     font-size: 16px;
 }
 
-`
-
+`;
