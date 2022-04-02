@@ -24,6 +24,7 @@ const addOrder = async (req, res) => {
     creditCard,
     expiration,
     postalCode,
+    grandTotal,
   } = req.body;
   const id = uuidv4();
 
@@ -39,6 +40,7 @@ const addOrder = async (req, res) => {
     creditCard: creditCard,
     expiration: expiration,
     postalCode: postalCode,
+    grandTotal: grandTotal,
     _id: id,
   };
 

@@ -14,6 +14,11 @@ const Checkout = () => {
   //error state to keep track of errors in front end form validation
   //and messages from server to display to user
   const [error, setError] = useState(null);
+  //save the sum of subtotals and grand total
+  const [sumSubtotals, setSumSubtotals] = useState(10); //set the subtotal to 10 for testing, should be null when we can set it with the reduce function
+  const [grandTotal, setGrandTotal] = useState(null);
+  //discount amount
+  const [discountedAmount, setDiscountedAmount] = useState(null);
   // useState to save all the inputs
   const [products, setProducts] = useState([]);
   const [firstName, setFirstName] = useState(null);
@@ -29,6 +34,30 @@ const Checkout = () => {
 
   //close modal
   setDisplayModal(false);
+
+  //---------get the sum of all the subtotals and set it with setSumSubtotals--------------------
+  // // if itemsToPurchase is empty, this function causes an infinite loop of rendering so the brower crashes
+  // //but i know it works to get the sum of all subtotals as i tested in CartTable where i could access itemArray....
+  //   const getSumSubtotals = itemsToPurchase.reduce((acc, current) => {
+  //     return acc + current.price * current.quantity;
+  //   }, 0);
+  //   // console.log("sum", sumSubtotals);
+  //   setSumSubtotals(getSumSubtotals);
+  //---------------------------------------------------------------------------------------------------------
+
+  // discount handle
+  const discountCodes = [
+    { code: "ARMED", reduction: 0.25 },
+    { code: "SUMMER", reduction: 0.1 },
+  ];
+  const handleSubmitDiscount = (e) => {
+    e.preventDefault();
+    const enteredCode = e.target.value.toUpperCase();
+    const discountObj = discountCodes.find(
+      (discount) => discount.code === enteredCode
+    );
+    setDiscountedAmount(sumSubtotals * discountObj.reduction);
+  };
 
   //temporary handleSubmit
   const handleSubmit = (e) => {
@@ -66,7 +95,8 @@ const Checkout = () => {
   // email: email,
   // creditCard: creditCard,
   // expiration: expiration,
-  // postalCode: expiration
+  // postalCode: expiration,
+  //   grandTotal: grandTotal
   // }
 
   //     fetch("/add-order", {
@@ -99,6 +129,28 @@ const Checkout = () => {
     <PageWrapper>
       <h1>CHECKOUT</h1>
       <CartTable itemArray={itemsToPurchase} />
+      <TotalWrapper>
+        <SumSubtotals>
+          The subtotal of your order is: {sumSubtotals}$
+        </SumSubtotals>
+        <DiscountWrapper>
+          <SubtalChanges>DISCOUNT CODE: </SubtalChanges>
+          <StyledFormDiscount onSubmit={(e) => handleSubmitDiscount(e)}>
+            <StyledInputDiscount type="text" placeholder="ex: ARMED" />
+          </StyledFormDiscount>
+          <SubtalChanges>
+            Discount amount: <span>-{discountedAmount}$</span>
+          </SubtalChanges>
+        </DiscountWrapper>
+        <SubtalChanges>
+          TAXES: <StyledSpan>{sumSubtotals * 0.15}$</StyledSpan>
+        </SubtalChanges>
+        {/* setting a hard shipping fees as it would get too complicated to vary the cost..... */}
+        <SubtalChanges>SHIPPING: 10$</SubtalChanges>
+        <SubtalChanges>
+          TOTAL: <StyledSpan>{sumSubtotals * 1.15 + 10}$</StyledSpan>
+        </SubtalChanges>
+      </TotalWrapper>
 
       {/* <Styledform onSubmit={handleSubmit}> */}
       <Styledform onSubmit={(e) => handleSubmit(e)}>
@@ -183,6 +235,14 @@ const Checkout = () => {
     </PageWrapper>
   );
 };
+
+const SumSubtotals = styled.div``;
+const SubtalChanges = styled.p``;
+const DiscountWrapper = styled.div``;
+const StyledFormDiscount = styled.form``;
+const StyledInputDiscount = styled.input``;
+const StyledSpan = styled.span``;
+const TotalWrapper = styled.div``;
 
 const Styledform = styled.form`
   margin-top: 100px;
