@@ -47,8 +47,8 @@ const Checkout = () => {
 
   console.log("subtot", subtotal, typeof subtotal)
 
-
-  let taxes = Number((0.149975*subtotal).toFixed(2));
+  //GST only
+  let taxes = Number((0.05*subtotal).toFixed(2));
 
 
   //close modal
@@ -161,7 +161,7 @@ const Checkout = () => {
         email: email,
         creditCard: creditCard,
         expiration: expiration,
-        postalCode: expiration,
+        postalCode: postalCode,
         grandTotal: total
     }
 

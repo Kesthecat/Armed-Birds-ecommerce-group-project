@@ -29,8 +29,10 @@ const CartModal = () => {
     
     return (
         <Modal isDisplay={displayModal}>
-                <CloseButton onClick={handleClose}>&times;</CloseButton>
             <ModalContent>
+                <CloseDiv>
+                    <CloseButton onClick={handleClose}>&times;</CloseButton>
+                </CloseDiv>
                 <h2>Your Cart</h2>
                 <CartTable itemArray={selectedItems} />
 
@@ -47,26 +49,31 @@ const Modal = styled.div`
     display: ${props => (props.isDisplay ? 'block' : 'none')};
     position: fixed; 
     z-index: 1; 
-    top: 87px;
-    right: 10px;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px 5px var(--color-main);
-    width: 50vw;
-    background-color: white;
-    overflow: scroll;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    overflow: auto; 
     
-
-    h2 {
-        margin: 15px 0 20px 0;
-    }
-
 `
 const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 5px var(--color-main);
+    width: 50vw;
+    margin-left: 50vw;
+    margin-top: 80px;
+`
+const CloseDiv = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 `
 
 const CloseButton = styled.span`
