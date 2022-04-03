@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useHistory } from "react-router-dom";
 import PageWrapper from "./PageWrapper"
 import { ProductsContext } from "./ShopPage/ProductsContext";
 import { OrderContext } from "./Order/OrderContext";
@@ -37,7 +37,7 @@ const ItemDetails = () => {
 
     //array of selectedItems that is stored in session storage
     //has shape [{_id, name, price, quantity}]
-    const { selectedItems, setSelectedItems } = useContext(OrderContext);
+    const { selectedItems, setSelectedItems, setDisplayModal } = useContext(OrderContext);
 
     //state to keep track of quantity selected for purchase 
     const [ quantity, setQuantity ] = useState(0);
@@ -45,13 +45,14 @@ const ItemDetails = () => {
     //state and loading of item details
     const [ state, dispatch ] = useReducer(reducer, initialState);
     
-    // const { id } = useParams(); //hook error coming from useParams
+    const { id } = useParams(); 
+
+    const history = useHistory();
 
     const dropdownArray = [];
 
     useEffect(() => {
-        fetch(`/get-item/6553`, { 
-        // fetch(`/get-item/${id}`, { 
+        fetch(`/get-item/${id}`, { 
             method: "GET", 
             headers: {
                 "Content-Type": "application/json"
@@ -63,7 +64,7 @@ const ItemDetails = () => {
             console.log("fetch item data", data, data.data)
             dispatch ({
                 type: "item-loaded-from-server", 
-                item: data.data //verify what is being sent by server
+                item: data.data 
             })
             
         })
@@ -74,6 +75,8 @@ const ItemDetails = () => {
             })
         })
     }, [])
+
+    //FETCH BY COMPANY ID TO GET COMPANY NAME AND LINK 
 
     //populating number array for the quantity dropdown
     if (state.status === "idle") {
@@ -86,35 +89,49 @@ const ItemDetails = () => {
 
     //click function for the BUY button
     const handleClick = () => {
+
+        const priceNum = Number(state.item.price.slice(1));
+        
+        //if item is already in cart, then add new quantity
+
+
         const currentItem = {
             _id: state.item._id, 
             name: state.item.name, 
             price: state.item.price, 
-            quantity: quantity
+            quantity: quantity, 
+            itemTotal: (priceNum*quantity).toFixed(2)
         }
         setSelectedItems([...selectedItems, currentItem]);
 
-        //set modal to true
+        //display modal
+        setDisplayModal(true);
         //history.push to shop page
+        history.push("/shop");
+
     }
 
     return (
         <PageWrapper>
-            {/* <NavLink to="/shop">BACK TO SHOP</NavLink> */}
+            
+            <BackLink>
+                <NavLink to="/shop">BACK TO SHOP</NavLink>
+            </BackLink> 
+
             {( state.status === "idle" && 
             <ProductCard>
                 <ImgDiv>
-                    <img src={state.item.imageSrc}/>
+                    <img src={state.item.imageSrc} width="350px"/>
                 </ImgDiv>
                 <InfoDiv>
                     <ProductName>{state.item.name}</ProductName>
                     {/* <Company>{state.item.company}</Company> */}
                     <Price>{state.item.price}</Price>
-                    <Description>Wear it on your {state.item.body_location}!</Description>
+                    <Description>Wear it on your <span>{state.item.body_location.toLowerCase()}</span>!</Description>
                     
-                    <InStock>{(state.item.numInStock > 0) ? "In Stock" : "Out of Stock"}</InStock>
                     <Dropdown array={dropdownArray} label="Quantity" stateSetter={setQuantity}/>
-                    <BuyButton onClick={handleClick} disabled={(state.item.numInStock === 0)}>BUY</BuyButton>
+                    <InStock>{(state.item.numInStock > 0) ? "In Stock" : "Out of Stock"}</InStock>
+                    <BuyButton onClick={handleClick} disabled={(state.item.numInStock === 0) || (quantity < 1)}>BUY</BuyButton>
                 </InfoDiv>
             </ProductCard>
             )}
@@ -123,18 +140,30 @@ const ItemDetails = () => {
     )
 }
 
+const BackLink = styled.div`
+   text-align: left;
+   text-decoration: none;
+   font-family: var(--font-heading);
+   margin-left: 150px;
+   width: 100%;
+`
 const ProductCard = styled.div`
     display: flex;
     justify-content: space-evenly;
+    margin-top: 50px;
+    width: 75vw;
 `
 
 const ImgDiv = styled.div`
     margin: 0 auto;
+
+
 `
 
 const InfoDiv = styled.div`
     display: flex;
     flex-direction: column;
+    margin-left: 40px;
 
     div * {
         margin: 10px 0;
@@ -142,22 +171,37 @@ const InfoDiv = styled.div`
 `
 
 const ProductName = styled.h2`
+    margin: 10px 0;
 `
 
 //make this a NavLink later
 const Company = styled.h3`
+    margin: 10px 0;
 `
 
 const Price = styled.h4`
+    margin: 10px 0;
 `
 
 const Description = styled.p`
+    margin: 10px 0;
+    span {
+        font-style: italic;
+    }
 `
 
 const InStock = styled.p`
+    margin: 10px 0;
 `
 
 const BuyButton = styled.button`
+    margin: 10px 0;
+    padding: 15px;
+    width: 200px;
+    font-size: 25px;
+    font-family: var(--font-heading);
+    border-radius: 5px;
+    background-color: ${props => props.disabled ? "#d3d3d3" : '#50479A'};
 `
 
 

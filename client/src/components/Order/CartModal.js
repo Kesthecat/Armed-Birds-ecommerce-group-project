@@ -2,25 +2,29 @@ import styled from "styled-components";
 import { OrderContext } from "./OrderContext";
 import CartTable from "./CartTable";
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //Cart modal that pops up when you click the cart icon
 const CartModal = () => {
-    const { displayModal, setDisplayModal } = useContext(OrderContext);
+    const history = useHistory();
 
-    // will use this once we get the add to cart function working on the item details page
-    // const {selectedItems} = useContext(OrderContext);
+    const { displayModal, setDisplayModal, actions: { beginOrderProcess }} = useContext(OrderContext);
 
-    //dummy array to test formatting
-    const selectedItems = [{_id: 43, name: "stuff", price: "44", quantity: 2}]
+    const {selectedItems} = useContext(OrderContext);
 
     //make sure price is a number before doing this
     const orderTotal = selectedItems.reduce((acc, item) => {
-        return acc + item.price * item.quantity;
+        const priceNum = Number(item.price.slice(1))
+        return acc + priceNum * item.quantity;
     }, 0);
 
     const handleClose = () => {
         setDisplayModal(false);
+    }
+
+    const handleClick = () => {
+        beginOrderProcess();
+        history.push("/checkout");
     }
     
     return (
@@ -30,9 +34,10 @@ const CartModal = () => {
                 <h2>Your Cart</h2>
                 <CartTable itemArray={selectedItems} />
 
-                <Total>TOTAL: ${orderTotal}</Total>
+                <Total>TOTAL: ${Math.round(orderTotal*100)/100}</Total>
 
-                <StyledNavLink to="/checkout">CHECKOUT</StyledNavLink>
+                <Button onClick={handleClick} disabled={(selectedItems.length === 0)}>CHECKOUT</Button>
+    
             </ModalContent>
         </Modal>
     )
@@ -49,6 +54,7 @@ const Modal = styled.div`
     box-shadow: 0 0 10px 5px var(--color-main);
     width: 50vw;
     background-color: white;
+    overflow: scroll;
     
 
     h2 {
@@ -78,14 +84,17 @@ const Total = styled.h4`
     margin: 15px 0;
 `
 
-const StyledNavLink = styled(NavLink)`
-    font-size: 22px;
+const Button = styled.button`
+    text-align: center;
+    font-size: 25px;
     font-family: var(--font-heading);
-    text-decoration: none;
     background-color: var(--color-main);
     color: white;
-    padding: 12px 18px;
+    padding: 15px 18px;
     border-radius: 5px;
     margin: 10px 0;
+    width: 200px;
+    cursor: pointer;
 `
+
 export default CartModal; 
