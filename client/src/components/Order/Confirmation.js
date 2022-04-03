@@ -1,10 +1,25 @@
 import styled from "styled-components";
 import PageWrapper from "../PageWrapper";
-import { useReducer } from "react";
+import { useReducer, useContext } from "react";
 import { useEffect } from "react";
 import ProductsLoading from "../ShopPage/ProductsLoading";
+import { OrderContext } from "./OrderContext";
 
 const Confirmation = () => {
+
+  //the lastOrder object is the exact order object that has been sent to the server
+  //the itemsPurchased object is an array of the items purchased with details -- this
+  //array will be used in the call to CartTable below (see **** ) to render the items 
+  //purchased
+  //itemsPurchased has shape [{_id, name, imageSrc, price, quantity, itemTotal}] 
+  //since we have these in state, we don't need to do a fetch for the confirmation
+  const { lastOrder, state: { itemsPurchased, status }, actions: { afterPurchaseReset }} = useContext(OrderContext);
+  console.log("last order", lastOrder);
+
+  if (status === "order-processing") {
+    return <ProductsLoading />;
+  }
+
   //   const initialState = {
   //     status: "loading", //idle, fetch-failed
   //     item: null,
@@ -56,6 +71,18 @@ const Confirmation = () => {
 
   //   const [state, dispatch] = useReducer(reducer, initialState);
   //   console.log("state", state);
+  
+  
+  //****************************
+  //need to have this reset state for the order context, so include this call right before your return
+  // afterPurchaseReset();
+
+  //*********************
+  //use cartTable component in the return to render the items purchased -- can go before or after all
+  //the order information you are displaying
+  // <CartTable itemArray={itemsPurchased} type="confirmation" />
+  
+  
   return null;
   //   (
   // <PageWrapper>

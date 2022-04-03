@@ -13,7 +13,7 @@ export const OrderContext = createContext();
 const initialState = {
     status: "idle", 
     error: null, 
-    itemsToPurchase: [], //array of item ids, names, quantities and prices
+    itemsPurchased: [], //array of item ids, names, quantities and prices
     //has shape [{_id, name, price, quantity}]
 }
 
@@ -24,7 +24,7 @@ const reducer = (state, action) => {
                 ...state, 
                 status: "items-selected", 
                 error: null, 
-                itemsToPurchase: action.selectedItems, 
+                // itemsToPurchase: action.selectedItems, 
             };
         }
         case ("cancel-order-process"): { //for CANCEL BUTTON on checkout page
@@ -50,7 +50,7 @@ const reducer = (state, action) => {
             return {
                 ...initialState,
                 status: "purchased",
-                itemsToPurchase: action.selectedItems, 
+                itemsPurchased: action.selectedItems, 
             }
         }
         case ("after-order-reset"): {
@@ -82,7 +82,7 @@ export const OrderContextProvider = ({children}) => {
     const beginOrderProcess = () => {
         dispatch({
             type: "begin-order-process", 
-            selectedItems: selectedItems, 
+            // selectedItems: selectedItems, 
         });
     };
 
@@ -107,13 +107,13 @@ export const OrderContextProvider = ({children}) => {
     }
 
     const orderSuccess = () => {
+        dispatch({
+            type: "order-success",
+            itemsPurchased: selectedItems,
+        })
         //empty the cart
         setSelectedItems([]);
 
-        dispatch({
-            type: "order-success",
-            selectedItems: []
-        })
     }
 
     const afterPurchaseReset = () => {
