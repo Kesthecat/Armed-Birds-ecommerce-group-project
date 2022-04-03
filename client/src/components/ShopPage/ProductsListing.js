@@ -3,12 +3,16 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ProductsContext } from "./ProductsContext";
 import ProductPreview from "./ProductPreview";
+import ProductsLoading from "./ProductsLoading";
 
 //grid of all the product preview cards, on the shop page
 const ProductsListing = () => {
 
     const { state: { status, products } } = useContext(ProductsContext);
     
+    if (status === "loading") {
+        return <ProductsLoading />;
+    }
     
     return (
         <Wrapper>

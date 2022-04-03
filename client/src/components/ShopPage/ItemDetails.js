@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { NavLink, useParams, useHistory } from "react-router-dom";
-import PageWrapper from "./PageWrapper";
-import { ProductsContext } from "./ShopPage/ProductsContext";
-import { OrderContext } from "./Order/OrderContext";
-import Dropdown from "./ShopPage/Dropdown";
+import PageWrapper from "../PageWrapper";
+import { ProductsContext } from "./ProductsContext";
+import { OrderContext } from "../Order/OrderContext";
+import Dropdown from "./Dropdown";
+import ProductsLoading from "./ProductsLoading";
 
 const initialState = {
   itemStatus: "loading", //idle, fetch-failed
@@ -125,6 +126,7 @@ const ItemDetails = () => {
 
     const currentItem = {
       _id: state.item._id,
+      imageSrc: state.item.imageSrc,
       name: state.item.name,
       price: state.item.price,
       quantity: quantity,
@@ -140,7 +142,7 @@ const ItemDetails = () => {
 
   // will be replace with the loading component
   if (state.itemStatus === "loading" || state.companyStatus === "loading")
-    return <div>....LOADING.....</div>;
+    return <ProductsLoading />;
 
   return (
     <PageWrapper>
