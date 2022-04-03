@@ -1,26 +1,33 @@
 import { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import PageWrapper from "../PageWrapper";
 import { OrderContext } from "./OrderContext";
 import CartTable from "./CartTable";
 import styled from "styled-components";
 
 const Checkout = () => {
-  const {
-    state: { itemsToPurchase },
-    displayModal,
-    setDisplayModal,
-  } = useContext(OrderContext);
+
+    const {
+        state: { itemsToPurchase, error, status },
+        actions: { cancelOrderProcess, orderRequested, orderFailure, 
+            orderSuccess },
+            setDisplayModal, setLastOrder
+        } = useContext(OrderContext);
+        
+    //shipping is a flat rate for now
+    const SHIPPING = 10.00;
+
+    const history = useHistory();
 
   //error state to keep track of errors in front end form validation
-  //and messages from server to display to user
-  const [error, setError] = useState(null);
-  //save the sum of subtotals and grand total
-  const [sumSubtotals, setSumSubtotals] = useState(10); //set the subtotal to 10 for testing, should be null when we can set it with the reduce function
-  const [grandTotal, setGrandTotal] = useState(null);
+  const [formError, setFormError] = useState(null);
+
   //discount amount
-  const [discountedAmount, setDiscountedAmount] = useState(null);
+  const [discountedAmount, setDiscountedAmount] = useState(0);
+  //msg to show discount status
+  const [discountMsg, setDiscountMsg] = useState("");
+
   // useState to save all the inputs
-  const [products, setProducts] = useState([]);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [streetAddress, setStreetAddress] = useState(null);
@@ -31,19 +38,21 @@ const Checkout = () => {
   const [creditCard, setCreditCard] = useState(null);
   const [expiration, setExpiration] = useState(null);
   const [postalCode, setPostalCode] = useState(null);
+  const [discountCode, setDiscountCode] = useState(null);
+
+  let subtotal = itemsToPurchase.reduce((acc, item) => {
+        console.log("item total ltype", typeof item.itemTotal)
+        return acc + Number(item.itemTotal);
+      }, 0);
+
+  console.log("subtot", subtotal, typeof subtotal)
+
+  //GST only
+  let taxes = Number((0.05*subtotal).toFixed(2));
+
 
   //close modal
   setDisplayModal(false);
-
-  //---------get the sum of all the subtotals and set it with setSumSubtotals--------------------
-  // // if itemsToPurchase is empty, this function causes an infinite loop of rendering so the brower crashes
-  // //but i know it works to get the sum of all subtotals as i tested in CartTable where i could access itemArray....
-  //   const getSumSubtotals = itemsToPurchase.reduce((acc, current) => {
-  //     return acc + current.price * current.quantity;
-  //   }, 0);
-  //   // console.log("sum", sumSubtotals);
-  //   setSumSubtotals(getSumSubtotals);
-  //---------------------------------------------------------------------------------------------------------
 
   // discount handle
   const discountCodes = [
@@ -51,111 +60,199 @@ const Checkout = () => {
     { code: "SUMMER", reduction: 0.1 },
   ];
   const handleSubmitDiscount = (e) => {
+    setDiscountMsg("");
     e.preventDefault();
-    const enteredCode = e.target.value.toUpperCase();
+
     const discountObj = discountCodes.find(
-      (discount) => discount.code === enteredCode
+      (discount) => discount.code === discountCode
     );
-    setDiscountedAmount(sumSubtotals * discountObj.reduction);
+    if (!discountObj) {
+        setDiscountMsg("Discount not valid.");
+        return;
+    }
+    setDiscountedAmount((subtotal * discountObj.reduction)*-1);
+    setDiscountMsg(`${discountCode} discount applied!`)
   };
 
-  //temporary handleSubmit
+  let total = (subtotal - discountedAmount + taxes + SHIPPING);
+
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-    window.alert("Temporary handleSubmit response.");
-  };
 
-  // const handleSubmit = (e) => {
+      e.preventDefault();
 
-  //     e.preventDefault();
-  //     beginOrderProcess();
+      //validate to if any of the fields are empty and set the appropriate error message
+      if (!firstName || !lastName || !streetAddress || !city || !province || !country || !email || !postalCode) {
+          setFormError("All fields are required!")
+          return;
+      }
 
-  //     //validate to if any of the fields are empty and set the appropriate error message
-  //     if (!firstName || !lastName || !streetAddress || !city || !province || !country || !email || !postalCode) {
-  //         setError("All fields are required!")
-  //         return;
-  //     }
+      if (!creditCard || !expiration) {
+          setFormError("Payment information is required!")
+          return;
+      }
 
-  //     if (!creditCard || !expiration) {
-  //         setError("Payment information is required!")
-  //         return;
-  //     }
+      const provinces = [ "newfoundland", "nl", 
+                        "prince edward island", "pe",
+                        "nova scotia", "ns", 
+                        "new brunswick", "nb", 
+                        "quebec", "qc", 
+                        "ontario", "on", 
+                        "manitoba", "mb", 
+                        "saskatchewan", "sk", 
+                        "alberta", "ab", 
+                        "british columbia", "bc", 
+                        "yukon", "yt", 
+                        "northwest territories", "nt", 
+                        "nunavut", "nu"]
 
-  //     //need to validate if some of the fields are in the correct format
-  //     //TODO
+    //check to see if customer has entered a complete Canadian address:
+    
+    //check whether country code is valid 
+    if ((country.toLowerCase().trim() !== 'canada' && country.toLowerCase().trim() !== 'ca')) {
+      setFormError("We can only deliver to Canadian addresses, sorry :(")
+        return;
+    }
 
-  // const newOrder = {
-  // products: itemsToPurchase,
-  // firstName: firstName,
-  // lastName: lastName,
-  // streetAddress: streetAddress,
-  // city: city,
-  // province: province,
-  // country: country,
-  // email: email,
-  // creditCard: creditCard,
-  // expiration: expiration,
-  // postalCode: expiration,
-  //   grandTotal: grandTotal
-  // }
+    //check whether province entered is valid
+    console.log("prov type", typeof province)
+    const isValidProvince = provinces.some((prov) => prov === province.toLowerCase());
+    if (!isValidProvince) {
+        setFormError("Please enter a Canadian province.")
+        return;
+    }
 
-  //     fetch("/add-order", {
-  //         method: "POST",
-  //         body: JSON.stringify(newOrder),
-  //         headers: {
-  //             Accept: "application/json",
-  //             "Content-Type": "application/json",
-  //         },
-  //     })
-  //         .then((res) => {
-  //             return res.json()})
-  //         .then((data) => {
+    //check whether address and city are non-empty, and whether postal code is 6 characters 
+    if (streetAddress.trim().length === "" || postalCode.split(" ").join("").length !== 6 || city.trim().length === "") {
+        setFormError("Please enter a valid address.")
+        return;
+    }
 
-  //             console.log("order posted response", data)
+    //check validity of name entries
+    if (firstName.trim().length === 0 || lastName.trim().length === 0) {
+        setFormError("Please enter your full name.")
+        return;
+    }
 
-  //            if (data.status === 200) {
-  //                //redirect to confirmation page
-  //               history.push("./confirmation");
-  //            }
+    //check validity of email
+    if (email.trim().length < 3 || !(email.includes("@"))) {
+        setFormError("Please enter a valid email address.")
+        return;
+    }
 
-  //         })
-  //         .catch((err) => {
-  //             setError(err);
-  //         })
-  // }
+    // array of products to purchase formatted to server expectation
+    let products = itemsToPurchase.map((item) => { 
+        return {
+            productId: item._id, 
+            quantity: item.quantity
+        }
+    });
 
-  //have checkout button disabled if cart is empty
+    console.log( "products", products);
+
+    const newOrder = {
+        products: products,
+        firstName: firstName,
+        lastName: lastName,
+        streetAddress: streetAddress,
+        city: city,
+        province: province,
+        country: country,
+        email: email,
+        creditCard: creditCard,
+        expiration: expiration,
+        postalCode: postalCode,
+        grandTotal: total
+    }
+
+    orderRequested();
+
+    fetch("/add-order", {
+        method: "POST",
+        body: JSON.stringify(newOrder),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => {
+            return res.json()})
+        .then((data) => {
+
+            console.log("order posted response", data)
+
+            if (data.status === 200) {
+            
+                //keep this order in state for the confirmation page
+                setLastOrder(data.data);
+                
+                //redirect to confirmation page
+                history.push("./confirmation");
+                
+                //reset order state and empty the cart
+                orderSuccess();
+            }
+            //any other errors
+            else {
+                orderFailure(data.message);
+                console.log("order failed", data.message)
+            }
+
+        })
+        .catch((err) => {
+            console.log("500", err)
+            orderFailure(err);
+
+        })
+  }
+
+  const handleCancelOrder = () => {
+    cancelOrderProcess();
+    history.push("/shop");
+  }
+
+  //this done here or conditional rendering in app
+  if (status === "order-processing") {
+      //loading component
+  }
+ 
   return (
     <PageWrapper>
       <h1>CHECKOUT</h1>
       <CartTable itemArray={itemsToPurchase} />
-      <TotalWrapper>
-        <SumSubtotals>
-          The subtotal of your order is: {sumSubtotals}$
-        </SumSubtotals>
-        <DiscountWrapper>
-          <SubtalChanges>DISCOUNT CODE: </SubtalChanges>
-          <StyledFormDiscount onSubmit={(e) => handleSubmitDiscount(e)}>
-            <StyledInputDiscount type="text" placeholder="ex: ARMED" />
-          </StyledFormDiscount>
-          <SubtalChanges>
-            Discount amount: <span>-{discountedAmount}$</span>
-          </SubtalChanges>
-        </DiscountWrapper>
-        <SubtalChanges>
-          TAXES: <StyledSpan>{sumSubtotals * 0.15}$</StyledSpan>
-        </SubtalChanges>
-        {/* setting a hard shipping fees as it would get too complicated to vary the cost..... */}
-        <SubtalChanges>SHIPPING: 10$</SubtalChanges>
-        <SubtalChanges>
-          TOTAL: <StyledSpan>{sumSubtotals * 1.15 + 10}$</StyledSpan>
-        </SubtalChanges>
-      </TotalWrapper>
 
-      {/* <Styledform onSubmit={handleSubmit}> */}
+    <SummaryWrapper>
+        <DiscountWrapper>
+            <div>
+                <SubtotalChanges>DISCOUNT CODE: </SubtotalChanges>
+                <StyledFormDiscount onSubmit={(e) => handleSubmitDiscount(e)}>
+                    <input type="text" placeholder="ex: ARMED" onChange={(e) => setDiscountCode(e.target.value)}/>
+                </StyledFormDiscount>
+            </div>
+
+                <Message>{discountMsg}</Message>
+
+        </DiscountWrapper>
+        <TotalWrapper>
+            <SubtotalChanges>
+            SUBTOTAL:  ${subtotal.toFixed(2)}
+            </SubtotalChanges>
+            <SubtotalChanges>
+            DISCOUNT: ${discountedAmount.toFixed(2)}
+            </SubtotalChanges>
+            <SubtotalChanges>
+            TAXES: ${taxes.toFixed(2)}
+            </SubtotalChanges>
+            <SubtotalChanges>SHIPPING: ${SHIPPING.toFixed(2)}</SubtotalChanges>
+            <SubtotalChanges>
+            TOTAL: ${total.toFixed(2)}
+            </SubtotalChanges>
+        </TotalWrapper>
+      </SummaryWrapper>  
+
       <Styledform onSubmit={(e) => handleSubmit(e)}>
         <LeftWrapper>
-          <StyledH3>Buyer's infomation</StyledH3>
+          <StyledH3>Your information</StyledH3>
           <Wrapper>
             <StyledInput
               type="text"
@@ -178,7 +275,7 @@ const Checkout = () => {
           />
           <StyledInput
             type="text"
-            placeholder="Number Street appt"
+            placeholder="Apt# - Street Address"
             required
             onChange={(e) => setStreetAddress(e.target.value)}
           />
@@ -223,26 +320,60 @@ const Checkout = () => {
             <StyledInput
               type="text"
               placeholder="expiration"
-              required
+            
               onChange={(e) => setExpiration(e.target.value)}
             />
           </Wrapper>
+          <Message>{formError}{error}</Message>
           <BtnWrapper>
-            <ConfirmBtn>Confirm Order</ConfirmBtn>
+            <ConfirmBtn>CONFIRM ORDER</ConfirmBtn>
           </BtnWrapper>
+            <CancelButton onClick={handleCancelOrder}>CANCEL ORDER</CancelButton>
         </RightWrapper>
       </Styledform>
     </PageWrapper>
   );
 };
 
-const SumSubtotals = styled.div``;
-const SubtalChanges = styled.p``;
-const DiscountWrapper = styled.div``;
-const StyledFormDiscount = styled.form``;
-const StyledInputDiscount = styled.input``;
-const StyledSpan = styled.span``;
-const TotalWrapper = styled.div``;
+
+const SubtotalChanges = styled.p`
+    font-family: "Poppins";
+`;
+
+const SummaryWrapper = styled.div`
+    display: flex;
+    justify-content: space-around;
+   
+    div {
+        margin: 25px;
+    }
+`
+
+const DiscountWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div {
+        display: flex;
+    }
+`;
+
+const StyledFormDiscount = styled.form`
+    input {
+        margin-left: 10px;
+}`;
+
+
+const TotalWrapper = styled.div`
+    right: 0;
+    text-align: right;
+
+    p {
+        margin: 7px 0;
+    }
+`;
 
 const Styledform = styled.form`
   margin-top: 100px;
@@ -278,17 +409,43 @@ const StyledH3 = styled.h3`
   font-size: 30px;
   margin-bottom: 20px;
 `;
+
+const Message = styled.p`
+    text-align: center;
+    margin: 8px 0;
+    color: var(--color-secondary);
+    font-style: italic;
+    font-weight: bold;
+    height: 25px;
+`
+
 const ConfirmBtn = styled.button`
-  margin-top: 50px;
-  height: 80px;
-  width: 350px;
-  font-size: 40px;
+
+    text-align: center;
+    font-size: 25px;
+    font-family: var(--font-heading);
+    background-color: var(--color-main);
+    color: white;
+    padding: 15px 18px;
+    margin: 10px 0;
+    width: 300px;
+
+
   transition: 0.1s ease-in-out;
 
   &:hover {
-    cursor: pointer;
+
     transform: scale(1.05);
   }
 `;
+
+const CancelButton = styled.button`
+    color: var(--color-main);
+    background-color: white;
+    width: 200px;
+    font-size: 18px;
+    align-self: center;
+
+`
 
 export default Checkout;

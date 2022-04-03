@@ -43,7 +43,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 status: "error",
-                error: action.message, 
+                error: action.error, 
             }
         }
         case ("order-success"): { 
@@ -71,11 +71,13 @@ export const OrderContextProvider = ({children}) => {
 
     //keep track of user's selected item ids, names, quantity and prices in the current session before purchase
     //stored in session storage
-    //has shape [{_id, name, price, quantity}]
+    //has shape [{_id, name, price, quantity, subtotal, imageSrc}]
     const [selectedItems, setSelectedItems] = usePersistedState([], "current-cart");
 
     //state to indicate whether to display Cart Modal or not
     const [displayModal, setDisplayModal] = useState(false);
+
+    const [ lastOrder, setLastOrder ] = useState(null);
 
     const beginOrderProcess = () => {
         dispatch({
@@ -85,7 +87,7 @@ export const OrderContextProvider = ({children}) => {
     };
 
     const cancelOrderProcess = () => {
-        setSelectedItems([]);
+        // setSelectedItems([]);
         dispatch({
             type: "cancel-order-process", 
         })
@@ -132,7 +134,8 @@ export const OrderContextProvider = ({children}) => {
                     afterPurchaseReset,
                 },
                 selectedItems, setSelectedItems,
-                displayModal, setDisplayModal
+                displayModal, setDisplayModal, 
+                lastOrder, setLastOrder
             }}
             >{children}
         </OrderContext.Provider>

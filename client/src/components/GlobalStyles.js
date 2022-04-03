@@ -69,6 +69,8 @@ export default createGlobalStyle`
       border: none;
       color: white;
       background-color: var(--color-main);
+      cursor: pointer;
+      border-radius: 5px;
   }
 
   h1, h2 {
@@ -93,15 +95,15 @@ h2 {
 }
 
 h3 { 
-    font-size: 20px;
+    font-size: 24px;
 }
 
 h4 { 
-    font-size: 18px;
+    font-size: 20px;
 }
 
 p {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 `;

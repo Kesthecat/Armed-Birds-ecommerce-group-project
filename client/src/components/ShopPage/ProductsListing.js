@@ -16,8 +16,8 @@ const ProductsListing = () => {
             <>
             {products.map((product) => {
                 return (
-                    <NavLink to={`/shop/${product._id}`}>
-                        <ProductPreview key={product._id} imageSrc={product.imageSrc} name={product.name} price={product.price} />
+                    <NavLink to={`/shop/${product._id}` } key={product._id} >
+                        <ProductPreview imageSrc={product.imageSrc} name={product.name} price={product.price} />
                     </NavLink>
                     )
             })}

@@ -5,6 +5,7 @@ const Dropdown = ({array, label, stateSetter}) => {
 
     const handleSelect = (e) => { 
         stateSetter(e.target.value); 
+        console.log("selected qt", e.target.value)
     }
 
     return (
@@ -12,10 +13,12 @@ const Dropdown = ({array, label, stateSetter}) => {
             <label>{label}</label>
             <select onChange={handleSelect} name="chooseQty" id="chooseQty">
                 <option selected disabled>Choose:</option>
-               
+            
                     {array.map((el) => {
                         return <option value={el} key={el}>{el}</option>
                     })
+
+                
                 }
             </select>
         </Wrapper>
@@ -24,5 +27,16 @@ const Dropdown = ({array, label, stateSetter}) => {
 }
 
 const Wrapper = styled.div`
+    font-family: var(--font-body);
+    font-size: 18px;
+    label {
+        margin-right: 20px;
+        padding-right: 20px;
+    }
+
+    select {
+        font-size: 18px;
+        width: 100px;
+    }
 `
 export default Dropdown;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 //table of items in cart to display in cart and checkout components
 const CartTable = ({itemArray}) => {
 
-    console.log(itemArray)
+    console.log(itemArray);
 
     return (
         <Wrapper>
@@ -17,12 +17,13 @@ const CartTable = ({itemArray}) => {
                </tr>
 
                 {itemArray.map((item) => {
+                    const priceNum = Number(item.price.slice(1));
                    return <tr>
-                        <td><img src={item.imageSrc} /></td>
+                        <td><img src={item.imageSrc} width="100px"/></td>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
                         <td>{item.price}</td>
-                        <td>${item.price*item.quantity}</td>
+                        <td>${priceNum*item.quantity}</td>
                     </tr>
                 })
                 }
@@ -41,7 +42,7 @@ const Wrapper = styled.div`
     margin: 15px 0;
 
     table {
-        font-family: arial, sans-serif;
+        font-family: var(--font-body);
         border-collapse: collapse;
         width: 100%;
     }
