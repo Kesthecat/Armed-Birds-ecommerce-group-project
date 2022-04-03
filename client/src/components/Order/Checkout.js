@@ -218,7 +218,7 @@ const Checkout = () => {
  
   return (
     <PageWrapper>
-      <h1>CHECKOUT</h1>
+      <PageTitle>CHECKOUT</PageTitle>
       <CartTable itemArray={selectedItems} type="checkout" />
 
     <SummaryWrapper>
@@ -256,40 +256,34 @@ const Checkout = () => {
           <Wrapper>
             <StyledInput
               type="text"
-              placeholder="First Name"
-              required
+              placeholder="First Name"   
               onChange={(e) => setFirstName(e.target.value)}
             />
             <StyledInput
               type="text"
               placeholder="Last Name"
-              required
               onChange={(e) => setLastName(e.target.value)}
             />
           </Wrapper>
           <StyledInput
             type="email"
             placeholder="email"
-            required
             onChange={(e) => setEmail(e.target.value)}
           />
           <StyledInput
             type="text"
             placeholder="Apt# - Street Address"
-            required
             onChange={(e) => setStreetAddress(e.target.value)}
           />
           <Wrapper>
             <StyledInput
               type="text"
               placeholder="City"
-              required
               onChange={(e) => setCity(e.target.value)}
             />
             <StyledInput
               type="text"
               placeholder="Postal Code"
-              required
               onChange={(e) => setPostalCode(e.target.value)}
             />
           </Wrapper>
@@ -297,13 +291,11 @@ const Checkout = () => {
             <StyledInput
               type="text"
               placeholder="Province/State"
-              required
               onChange={(e) => setProvince(e.target.value)}
             />
             <StyledInput
               type="text"
               placeholder="Country"
-              required
               onChange={(e) => setCountry(e.target.value)}
             />
           </Wrapper>
@@ -314,13 +306,11 @@ const Checkout = () => {
             <StyledInput
               type="text"
               placeholder="Credit Card number"
-              required
               onChange={(e) => setCreditCard(e.target.value)}
             />
             <StyledInput
               type="text"
               placeholder="expiration"
-            
               onChange={(e) => setExpiration(e.target.value)}
             />
           </Wrapper>
@@ -335,9 +325,15 @@ const Checkout = () => {
   );
 };
 
+const PageTitle = styled.h1`
+    font-size: 64px;
+    letter-spacing: 15px;
+    font-weight: bold;
+    margin: 20px 20px 30px 20px;
+`
 
 const SubtotalChanges = styled.p`
-    font-family: "Poppins";
+    font-family: var(--font-subheading);
 `;
 
 const SummaryWrapper = styled.div`

@@ -65,7 +65,7 @@ const CartModal = () => {
         overflow: auto; 
         
         h2 {
-            font-size: 25px;
+            font-size: 30px;
             margin-bottom: 10px;
         }
     `
@@ -104,7 +104,7 @@ const CartModal = () => {
         font-size: 16px;
         text-align: right;
         width: 100%;
-        margin-right: 100px;
+        margin-right: 50px;
     `
     
     const Button = styled.button`

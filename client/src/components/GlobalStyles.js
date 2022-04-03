@@ -13,7 +13,7 @@ export default createGlobalStyle`
     --color-text: #555555; //dark gray
     --font-heading: 'Quicksand', Arial, Helvetica, sans-serif;
     --font-subheading: 'Poppins', Arial, Helvetica, sans-serif;
-    --font-body: 'Nanum Gothic', Arial, Helvetica, sans-serif;
+    --font-body: 'Overpass', Arial, Helvetica, sans-serif;
   }
 
   /* http://meyerweb.com/eric/tools/css/reset/
