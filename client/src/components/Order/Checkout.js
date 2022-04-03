@@ -10,7 +10,7 @@ const Checkout = () => {
     const {
         state: { itemsToPurchase, error, status },
         actions: { cancelOrderProcess, orderRequested, orderFailure, 
-            orderSuccess },
+            orderSuccess }, selectedItems,
             setDisplayModal, setLastOrder
         } = useContext(OrderContext);
         
@@ -40,7 +40,7 @@ const Checkout = () => {
   const [postalCode, setPostalCode] = useState(null);
   const [discountCode, setDiscountCode] = useState(null);
 
-  let subtotal = itemsToPurchase.reduce((acc, item) => {
+  let subtotal = selectedItems.reduce((acc, item) => {
         console.log("item total ltype", typeof item.itemTotal)
         return acc + Number(item.itemTotal);
       }, 0);
@@ -141,7 +141,7 @@ const Checkout = () => {
     }
 
     // array of products to purchase formatted to server expectation
-    let products = itemsToPurchase.map((item) => { 
+    let products = selectedItems.map((item) => { 
         return {
             productId: item._id, 
             quantity: item.quantity
@@ -211,15 +211,15 @@ const Checkout = () => {
     history.push("/shop");
   }
 
-  //this done here or conditional rendering in app
-  if (status === "order-processing") {
-      //loading component
-  }
+//   //this done here or confirmation page
+//   if (status === "order-processing") {
+//       return <LoadingPreview />;
+//   }
  
   return (
     <PageWrapper>
       <h1>CHECKOUT</h1>
-      <CartTable itemArray={itemsToPurchase} />
+      <CartTable itemArray={selectedItems} />
 
     <SummaryWrapper>
         <DiscountWrapper>
@@ -235,7 +235,7 @@ const Checkout = () => {
         </DiscountWrapper>
         <TotalWrapper>
             <SubtotalChanges>
-            SUBTOTAL:  ${subtotal.toFixed(2)}
+            SUBTOTAL:  ${Math.round(subtotal*100)/100}
             </SubtotalChanges>
             <SubtotalChanges>
             DISCOUNT: ${discountedAmount.toFixed(2)}
