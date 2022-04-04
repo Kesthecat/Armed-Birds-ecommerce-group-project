@@ -97,7 +97,7 @@ const LandingPage = () => {
 
 const IntroBanner = styled.div`
   background-image: url(../banner.jpg);
-  width: 100vw;
+  width: 99vw;
   height: 425px;
   display: flex;
   justify-content: center;
