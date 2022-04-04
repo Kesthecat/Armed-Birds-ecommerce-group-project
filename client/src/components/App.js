@@ -13,6 +13,7 @@ import Confirmation from "./Order/Confirmation";
 import Errorpage from "./Errorpage";
 import LandingPage from "./LandingPage";
 import CompanyListing from "./BrandsPage/CompanyListing";
+import Footer from "./Footer";
 
 function App() {
   return (
@@ -51,7 +52,7 @@ function App() {
             <Errorpage />
           </Route>
         </Switch>
-        {/* <Footer /> */}
+        <Footer />
       </Main>
     </BrowserRouter>
   );
