@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import CompanyPost from "./CompanyPost";
 import styled from "styled-components";
+import PageWrapper from "../PageWrapper";
+import { CompaniesContext } from "./CompaniesContext";
 
+//listing of all the brands in the shop
 const CompanyListing = () => {
-  const [companyList, setCompanyList] = useState(null);
-
-  useEffect(() => {
-    fetch("/get-companies")
-      .then((res) => {
-        console.log("res", res);
-        return res.json();
-      })
-      .then((data) => {
-        // console.log("DATA", data);
-        setCompanyList(data.data);
-        console.log("Company List", data);
-      })
-      .catch((err) => {
-        console.log("ERROR", err);
-      });
-  }, []);
+  const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
   return (
-    <Wrapper>
-      <PageTitle>Company List</PageTitle>
-      {companyList && (
+    <PageWrapper>
+      <PageTitle>Brands</PageTitle>
+      <Wrapper>
+      {companiesStatus === "idle" && (
         <>
-          {companyList.map((list) => {
+          {companies.map((list) => {
             return (
               <CompanyPost
-                key={list._1d}
+                key={list._id}
                 name={list.name}
                 url={list.url}
                 country={list.country}
@@ -38,7 +26,8 @@ const CompanyListing = () => {
           })}
         </>
       )}
-    </Wrapper>
+      </Wrapper>
+    </PageWrapper>
   );
 };
 

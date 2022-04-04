@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 // import Footer from "./Footer"
-// import LandingPage from "./LandingPage"
 import ShopPage from "./ShopPage";
 import ItemDetails from "./ShopPage/ItemDetails";
 import CartModal from "./Order/CartModal";
@@ -13,6 +12,7 @@ import Checkout from "./Order/Checkout";
 import Confirmation from "./Order/Confirmation";
 import Errorpage from "./Errorpage";
 import LandingPage from "./LandingPage";
+import CompanyListing from "./BrandsPage/CompanyListing";
 
 function App() {
   return (
@@ -43,9 +43,12 @@ function App() {
             <Confirmation />
           </Route>
 
+          <Route exact path="/brands">
+            <CompanyListing />
+          </Route>
+
           <Route path="/errorpage">
             <Errorpage />
-            {/* 404: Oops! */}
           </Route>
         </Switch>
         {/* <Footer /> */}
