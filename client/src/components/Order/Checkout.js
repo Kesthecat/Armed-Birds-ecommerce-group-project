@@ -71,7 +71,7 @@ const Checkout = () => {
     setDiscountMsg(`${discountCode} discount applied!`)
   };
 
-  let total = (subtotal - discountedAmount + taxes + SHIPPING);
+  let total = (Math.round((subtotal - discountedAmount + taxes + SHIPPING)*100)/100).toFixed(2);
 
 
   const handleSubmit = (e) => {
@@ -89,15 +89,15 @@ const Checkout = () => {
           return;
       }
 
-      // if (typeof creditCard !== "number" || creditCard.length !== 16) {
-      //   setFormError("Credit card number must be 16 numerals, no spaces.")
-      //     return;
-      // }
+      if (isNaN(+creditCard)) {
+        setFormError("Credit card number must be in numerals, no spaces.")
+          return;
+      }
 
-      // if (typeof expiration !== "number" || expiration.length !== 4) {
-      //   setFormError("Expiration date must be in MMYY numeric form.")
-      //     return;
-      // }
+      if (isNaN(+expiration)) {
+        setFormError("Expiration date must be in MMYY numeric form.")
+          return;
+      }
 
       const provinces = [ "newfoundland", "nl", 
                         "prince edward island", "pe",
@@ -219,11 +219,6 @@ const Checkout = () => {
     cancelOrderProcess();
     history.push("/shop");
   }
-
-//   //this done here or confirmation page
-//   if (status === "order-processing") {
-//       return <LoadingPreview />;
-//   }
  
   return (
     <PageWrapper>
@@ -376,9 +371,9 @@ const StyledFormDiscount = styled.form`
     }
 
     button {
-      padding: 5px;
+      padding: 6px 12px;
       font-family: var(--font-heading);
-      font-size: 12px;
+      font-size: 13px;
       margin: 5px 0;
     }
 `;

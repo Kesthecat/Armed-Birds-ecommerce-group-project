@@ -42,7 +42,7 @@ const CartModal = () => {
                         <CloseButton onClick={handleClose}>&times;</CloseButton>
                     </CloseDiv>
                     <h2>Your Cart</h2>
-                    <CartTable itemArray={selectedItems} type="checkout"/>
+                    <CartTable itemArray={selectedItems} type="cart"/>
     
                     <Total>SUBTOTAL:  ${(Math.round(orderTotal*100)/100).toFixed(2)}</Total>
     
@@ -80,7 +80,7 @@ const CartModal = () => {
         box-shadow: 0 0 10px 5px var(--color-main);
         width: 50vw;
         margin-left: 50vw;
-        margin-top: 83px;
+        margin-top: 103px;
     `
     const CloseDiv = styled.div`
         display: flex;
