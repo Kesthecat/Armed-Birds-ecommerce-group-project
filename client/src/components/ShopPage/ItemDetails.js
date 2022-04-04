@@ -5,7 +5,7 @@ import PageWrapper from "../PageWrapper";
 import { ProductsContext } from "./ProductsContext";
 import { OrderContext } from "../Order/OrderContext";
 import Dropdown from "./Dropdown";
-import ProductsLoading from "./ProductsLoading";
+import ItemLoader from "./ItemLoader";
 
 const initialState = {
   itemStatus: "loading", //idle, fetch-failed
@@ -142,7 +142,7 @@ const ItemDetails = () => {
 
   // will be replace with the loading component
   if (state.itemStatus === "loading" || state.companyStatus === "loading")
-    return <ProductsLoading />;
+    return <ItemLoader />;
 
   return (
     <PageWrapper>
