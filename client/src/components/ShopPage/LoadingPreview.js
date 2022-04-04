@@ -21,8 +21,8 @@ const loadingAnimation = keyframes`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15px;
-  width: 275px;
+  padding: 10px;
+  width: 300px;
   height: 400px;
   border-radius: 5px;
   background-color: var(--color-background);
