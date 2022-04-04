@@ -69,7 +69,7 @@ const addOrder = async (req, res) => {
         //don't need this if max ordering quatitty dealt with in the FE
         if (newStockNum < 0) {
           cannotBuy.push({
-            message: `Not enough stock to purchase ${itemFromServer.name}`,
+            message: `Not enough stock to purchase ${itemFromServer.name}. Please try again.`,
             productId: itemFromServer._id,
           });
           return;
@@ -85,7 +85,7 @@ const addOrder = async (req, res) => {
         status: 400,
         data: cannotBuy,
         message:
-          "Not enough stock. See data for details to know which product(s).",
+          "Not enough stock. Please try again. See data for details to know which product(s).",
       });
     }
     //----------------------PASSED STOCK CHECKPOINT---------------------------------------------
@@ -111,7 +111,7 @@ const addOrder = async (req, res) => {
         // the update is not successfull
         if (updateStock.modifiedCount === 0) {
           cannotUpdate.push({
-            message: `Cannot update stock of product ${itemFromServer.name}`,
+            message: `Cannot update stock of product ${itemFromServer.name}. Please try again.`,
             productId: idNum,
           });
           return;
@@ -125,7 +125,7 @@ const addOrder = async (req, res) => {
       return res.status(400).json({
         status: 400,
         data: cannotUpdate,
-        message: "Cannot update stock. See data for details.",
+        message: "Cannot update stock. Please try again. See data for details.",
       });
     }
     //------------------------PASS UPDATE CHECKPOINT --------------------------------------
@@ -139,7 +139,8 @@ const addOrder = async (req, res) => {
       return res.status(502).json({
         status: 502,
         data: req.body,
-        message: "Order couldn't be placed, please contact customer services.",
+        message:
+          "Order couldn't be placed. Please contact customer services, or try again.",
       });
     }
     res
@@ -150,7 +151,7 @@ const addOrder = async (req, res) => {
     res.status(400).json({
       status: 400,
       data: req.body,
-      message: "Missing info.",
+      message: "Missing info - Please try again.",
     });
   }
   client.close();
