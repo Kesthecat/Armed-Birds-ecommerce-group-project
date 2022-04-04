@@ -28,6 +28,10 @@ function App() {
             <LandingPage />
           </Route>
 
+          <Route exact path="/shop/:id">
+            <ItemDetails />
+          </Route>
+
           <Route exact path="/shop">
             <ShopPage />
           </Route>
@@ -50,10 +54,6 @@ function App() {
 
           <Route path="">
             <Errorpage />
-          </Route>
-
-          <Route exact path="/shop/:id">
-            <ItemDetails />
           </Route>
         </Switch>
       </Main>
