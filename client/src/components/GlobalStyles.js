@@ -9,6 +9,7 @@ export default createGlobalStyle`
   :root {
     --color-main: #50479A; // dark slate blue
     --color-secondary: 	#ad6f18; // dark maroon
+    --color-secondary-lower-opacity: rgba(175, 112, 24, 0.65); //dark maroom with lower opacity
     --color-background: #DAE0F2; 
     --color-text: #555555; //dark gray
     --font-heading: 'Quicksand', Arial, Helvetica, sans-serif;
