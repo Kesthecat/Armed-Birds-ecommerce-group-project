@@ -3,17 +3,38 @@ import { useContext } from "react";
 import { OrderContext } from "./OrderContext";
 
 //table of items in cart to display in cart and checkout components
-const CartTable = ({itemArray}) => {
+const CartTable = ({itemArray, type}) => {
 
+    //itemArray passed is the selectedItems array if using CartTable in CartModal or Checkout
+    //and itemArray is the itemsPurchased array from OrderContext if using on Confirmation page
+    
     const { selectedItems, setSelectedItems } = useContext(OrderContext);
 
-   
-    //make refs for each close div generated, in loop
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+
+        //get className of the DeleteDiv, which contains the itemId
+        //comes in this form: sc-grREDI lKRWh 6547
+        //so we will use the last 4 digits, which is the itemId
+        const className = e.target.className; 
+        const itemId = className.slice(-4);
+        console.log("itemId", itemId);
+
+        //filter itemArray array to remove the item
+        console.log("selected items before remove", itemArray)
+        console.log("typeof itemId", typeof itemId)
+        console.log("typoef item._id", )
+        const removedArray = itemArray.filter((item) => {
+            if (item._id !== Number(itemId)) {
+                console.log("typoef item._id", typeof item._id );
+                return item;
+            }
+        });
+        console.log("removedarray", removedArray);
+        setSelectedItems(removedArray);
 
     }
 
-    if (selectedItems.length === 0) {
+    if (itemArray.length === 0) {
         return (
             <Wrapper>
                 <h4>Your cart is empty!</h4>
@@ -25,7 +46,9 @@ const CartTable = ({itemArray}) => {
         <Wrapper>
 
             <Row>
-                <HeaderDiv></HeaderDiv>
+                {(type === "checkout" &&
+                    <HeaderDiv></HeaderDiv>
+                )}
                 <HeaderDiv></HeaderDiv>
                 <HeaderDiv><p>SKU</p></HeaderDiv>
                 <HeaderDiv><p>Item</p></HeaderDiv>
@@ -34,10 +57,12 @@ const CartTable = ({itemArray}) => {
                 <HeaderDiv><p>Item Subtotal</p></HeaderDiv>
             </Row>
 
-            {selectedItems.map((item, index) => {
+            {itemArray.map((item, index) => {
                 const priceNum = Number(item.price.slice(1));
                 return <Row shaded={(index%2 === 0)}>
-                    <DeleteDiv onClick={handleDelete}>&times;</DeleteDiv>
+                     {(type === "checkout" &&
+                        <DeleteDiv className={`${item._id}`} onClick={handleDelete}>&times;</DeleteDiv>
+                     )}
                     <div><img src={item.imageSrc} width="40px"/></div>
                     <div>{item._id}</div>
                     <div>{item.name}</div>
@@ -85,7 +110,14 @@ const Row = styled.div`
 
 `
 const DeleteDiv = styled.div`
-
+        cursor: pointer;
+        display: flex;
+        justify-content: flex-end;
+        font-size: 30px;
+    
+        &:hover{
+            color: var(--color-background);
+        }
 `
 
 export default CartTable;

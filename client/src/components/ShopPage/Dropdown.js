@@ -30,13 +30,12 @@ const Wrapper = styled.div`
   font-family: var(--font-body);
   font-size: 18px;
   label {
-    margin-right: 20px;
     padding-right: 20px;
   }
 
   select {
-    font-size: 18px;
-    width: 100px;
+    font-size: 16px;
+    width: 125px;
   }
 `;
 export default Dropdown;

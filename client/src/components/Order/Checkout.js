@@ -219,7 +219,7 @@ const Checkout = () => {
   return (
     <PageWrapper>
       <h1>CHECKOUT</h1>
-      <CartTable itemArray={selectedItems} />
+      <CartTable itemArray={selectedItems} type="checkout" />
 
     <SummaryWrapper>
         <DiscountWrapper>
@@ -235,17 +235,17 @@ const Checkout = () => {
         </DiscountWrapper>
         <TotalWrapper>
             <SubtotalChanges>
-            SUBTOTAL:  ${Math.round(subtotal*100)/100}
+            SUBTOTAL:  ${(Math.round(subtotal*100)/100).toFixed(2)}
             </SubtotalChanges>
             <SubtotalChanges>
-            DISCOUNT: ${discountedAmount.toFixed(2)}
+            DISCOUNT: ${(Math.round(discountedAmount*100)/100).toFixed(2)}
             </SubtotalChanges>
             <SubtotalChanges>
-            TAXES: ${taxes.toFixed(2)}
+            TAXES: ${(Math.round(taxes*100)/100).toFixed(2)}
             </SubtotalChanges>
             <SubtotalChanges>SHIPPING: ${SHIPPING.toFixed(2)}</SubtotalChanges>
             <SubtotalChanges>
-            TOTAL: ${total.toFixed(2)}
+            TOTAL: ${(Math.round(total*100)/100).toFixed(2)}
             </SubtotalChanges>
         </TotalWrapper>
       </SummaryWrapper>  

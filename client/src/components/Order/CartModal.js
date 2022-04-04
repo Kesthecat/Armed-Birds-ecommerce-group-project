@@ -42,9 +42,9 @@ const CartModal = () => {
                         <CloseButton onClick={handleClose}>&times;</CloseButton>
                     </CloseDiv>
                     <h2>Your Cart</h2>
-                    <CartTable itemArray={selectedItems}/>
+                    <CartTable itemArray={selectedItems} type="checkout"/>
     
-                    <Total>SUBTOTAL:  ${Math.round(orderTotal*100)/100}</Total>
+                    <Total>SUBTOTAL:  ${(Math.round(orderTotal*100)/100).toFixed(2)}</Total>
     
                     <Button onClick={handleClick} disabled={(selectedItems.length === 0)}>CHECKOUT</Button>
         

@@ -1,23 +1,39 @@
 import styled from "styled-components";
 import ProductsListing from "./ProductsListing";
 import PageWrapper from "../PageWrapper";
+import ShopSidebar from "./ShopSidebar";
 
 const Shop = () => {
 
     return (
         <PageWrapper>
-            <PageTitle>SHOP</PageTitle>
-            {/* side bar with filters */}
-            <ProductsListing />
+            <Container>
+                <ShopSidebar />
+                <Main>
+                    <PageTitle>SHOP</PageTitle>
+                    <ProductsListing />
+                </Main>
+            </Container>
         </PageWrapper>
     )
 }
 
 export default Shop;
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
 const PageTitle = styled.h1`
     font-size: 64px;
     letter-spacing: 20px;
     font-weight: bold;
-    margin: 20px;
-`
+    margin: 20px auto;
+`;
+
+const Main = styled.div`
+    display: flex;
+    flex-direction: column;
+`;

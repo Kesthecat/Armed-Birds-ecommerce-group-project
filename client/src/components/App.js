@@ -7,7 +7,7 @@ import Header from "./Header";
 // import Footer from "./Footer"
 // import LandingPage from "./LandingPage"
 import ShopPage from "./ShopPage";
-import ItemDetails from "./ItemDetails";
+import ItemDetails from "./ShopPage/ItemDetails";
 import CartModal from "./Order/CartModal";
 import Checkout from "./Order/Checkout";
 import Confirmation from "./Order/Confirmation";

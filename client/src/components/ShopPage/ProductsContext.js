@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 //load products data in context to use in all the Shop / Product Page components
 export const ProductsContext = createContext(null);
@@ -33,7 +33,11 @@ const reducer = (state, action) => {
 export const ProductsContextProvider = ({children}) => {
 
     const [ state, dispatch ] = useReducer(reducer, initialState);
-
+    
+    //state to keep track of filters and subfilters selected for the ProductListing component
+    const [filter, setFilter] = useState(null);
+    const [subfilter, setSubfilter] = useState(null);
+    
     useEffect(() => {
   
         fetch("/get-items", { 
@@ -60,7 +64,7 @@ export const ProductsContextProvider = ({children}) => {
         })
     }, [])
 
-    return <ProductsContext.Provider value={{ state }}>
+    return <ProductsContext.Provider value={{ state, filter, setFilter, subfilter, setSubfilter }}>
         {children}
         </ProductsContext.Provider>
 }
