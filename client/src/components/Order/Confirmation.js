@@ -34,45 +34,39 @@ const Confirmation = () => {
       <PageWrapper>
         <h1>Thank you for your order!</h1>
         <Confirmwrapper>
-          <Orderinfo>Order Number: 1093874987</Orderinfo>
           <Orderinfo>Item Summary:</Orderinfo>
           <CartTable itemArray={itemsPurchased} type="confirmation" />
+          <Orderinfo>Total: ${lastOrder.grandTotal}</Orderinfo>
+          <Orderinfo>Order Number: {lastOrder._id}</Orderinfo>
+          <Orderinfo>
+            Shipping Address: {lastOrder.streetAddress}, {lastOrder.city},{" "}
+            {lastOrder.province} {lastOrder.postalCode} {lastOrder.country}
+          </Orderinfo>
+          <Orderinfo>Email: {lastOrder.email}</Orderinfo>
         </Confirmwrapper>
       </PageWrapper>
     );
   }
 };
 
-const Itemdiv = styled.div`
-  display: flex;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: white;
-  width: max-content;
-`;
-
-const Itemimg = styled.img`
-  border-radius: 5px;
-`;
 const Confirmwrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
-  width: 625px;
+  width: 1000px;
   height: max-content;
-  background-color: var(--color-background);
   border-radius: 5px;
   margin-top: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 4px 14px 1px rgba(125, 125, 125, 0.63);
+  box-shadow: 0px 4px 14px 1px rgba(125, 125, 125, 0.63);
 `;
 
-const Orderinfo = styled.h4`
+const Orderinfo = styled.p`
   font-size: 20px;
   padding: 10px;
-`;
-const Item = styled.p`
-  font-size: 20px;
-  padding: 10px;
-  word-wrap: 400px;
+  font-weight: bold;
 `;
 
 export default Confirmation;
