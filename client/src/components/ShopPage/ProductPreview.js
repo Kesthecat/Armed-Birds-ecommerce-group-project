@@ -2,10 +2,14 @@ import styled from "styled-components";
 
 
 //product preview card, part of the product listing grid on the shop page
-const ProductPreview = ({ imageSrc, name, price }) => {
+const ProductPreview = ({ imageSrc, name, price, type, soldOut}) => {
+    console.log("soldOut in product preview", soldOut);
 
     return (
-        <Wrapper>
+        <Wrapper featured={(type === "featured")}>
+            {(soldOut && 
+                <SoldOutTag>SOLD OUT</SoldOutTag>
+            )}
             <ImgDiv>
                 <img src={imageSrc}/>
             </ImgDiv>
@@ -18,6 +22,7 @@ const ProductPreview = ({ imageSrc, name, price }) => {
 }
 
 const Wrapper = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: 15px;
@@ -25,8 +30,23 @@ const Wrapper = styled.div`
     height: 400px;
     background-color: var(--color-background); 
     border-radius: 5px;
-    box-shadow: 0 0 3px 3px var(--color-secondary);
+    box-shadow: ${props => (props.featured ? "0 0 3px 3px var(--color-secondary)" : "")};
 `
+const SoldOutTag = styled.p`
+    position: absolute;
+    /* transform: rotate(35deg); */
+    top: 13px;
+    right: 13px;
+    text-align: right;
+    z-index: 10;
+    font-family: Mulish;
+    font-size: 18px;
+    color: var(--color-secondary);
+    background: rgba(175, 112, 24, 0.3);
+    padding: 8px;
+    border-radius: 5px;
+`
+
 const ImgDiv = styled.div`
     display: flex;
     align-items: center;
@@ -35,7 +55,7 @@ const ImgDiv = styled.div`
     height: 200px;
     margin: 15px;
     border-radius: 10px;
-    /* border: 5px solid var(--color-secondary); */
+    /* border: 2px solid var(--color-secondary); */
 
     img {
         height: 160px;
@@ -55,6 +75,7 @@ const Name = styled.h4`
     text-align: center;
     margin: 20px 0 0 0;
     line-height: 1.3;
+    word-wrap: break-word;
     
 `
 

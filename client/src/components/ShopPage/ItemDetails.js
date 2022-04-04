@@ -206,6 +206,9 @@ const ProductCard = styled.div`
 
 const ImgDiv = styled.div`
   margin: 0 auto;
+  padding: 15px;
+  border: 3px solid var(--color-secondary);
+  border-radius: 5px;
 `;
 
 const InfoDiv = styled.div`
@@ -236,6 +239,7 @@ const Price = styled.h4`
 
 const Description = styled.p`
   margin: 10px 0;
+  font-weight: 100;
   span {
     font-style: italic;
   }

@@ -10,7 +10,7 @@ const CompanyListing = () => {
 
   return (
     <PageWrapper>
-      <PageTitle>Brands</PageTitle>
+      <PageTitle>BRANDS</PageTitle>
       <Wrapper>
       {companiesStatus === "idle" && (
         <>

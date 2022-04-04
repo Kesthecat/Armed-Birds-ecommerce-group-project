@@ -67,6 +67,7 @@ const CartModal = () => {
         h2 {
             font-size: 30px;
             margin-bottom: 10px;
+            color: var(--color-main);
         }
     `
     const ModalContent = styled.div`
