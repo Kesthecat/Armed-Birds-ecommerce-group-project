@@ -2,10 +2,12 @@ import styled from "styled-components";
 import Dropdown from "./Dropdown";
 import { useContext } from "react";
 import { ProductsContext } from "./ProductsContext";
+import { CompaniesContext } from "../BrandsPage/CompaniesContext";
 
 const ShopSidebar = () => {
 
     const { state: { status, products }, filter, setFilter, subfilter, setSubfilter } = useContext(ProductsContext);
+    const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
     const filterOptions = [ "All", "Category", "Body Location", "Brand"];
     //after filter selected, show list of the subfilters for that filter
@@ -34,13 +36,16 @@ const ShopSidebar = () => {
         })
         
         uniqueBodyLocations = [...new Set(bodyLocations)];
+    }
 
-        //array of brands
-        // const brands = products.map((product) => {
-        //     return product.body_location;
-        // })
+    if (companiesStatus === "idle") {
+        // array of brands
+        const brands = companies.map((company) => {
+            return company.name;
+        })
         
-        // uniqueBodyLocations = [...new Set(bodyLocations)];
+        uniqueBrands = [...new Set(brands)];
+
     }
 
     const handleClick = (e) => {
@@ -56,18 +61,9 @@ const ShopSidebar = () => {
                 <Dropdown array={filterOptions} label="Filter by:" stateSetter={setFilter} />
             </DropdownDiv>
 
-            {/* {(( filter === "All" || filter === null) &&
-            <>
-            </>
-            )} */}
-
             {( status === "idle" && filter === "Category" && 
             <List>
                 {uniqueCategories.map((cat) => {
-                    // let isMatched = false;
-                    // if (subfilter === cat) {
-                    //     isMatched = true;
-                    // }
                     return <button key={cat} className={cat} selected={(subfilter === cat)} onClick={handleClick} >{cat}</button>
                 })}
             </List>
@@ -76,11 +72,15 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Body Location" && 
             <List>
                 {uniqueBodyLocations.map((loc) => {
-                    // let isMatched = false;
-                    // if (subfilter === loc) {
-                    //     isMatched = true;
-                    // }
                     return <button key={loc} selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
+                })}
+            </List>
+            )}
+
+            {( companiesStatus === "idle" && status === "idle" && filter === "Brand" && 
+            <List>
+                {uniqueBrands.map((brand) => {
+                    return <button key={brand} selected={(subfilter === brand)} onClick={handleClick} className={brand}>{brand}</button>
                 })}
             </List>
             )}
