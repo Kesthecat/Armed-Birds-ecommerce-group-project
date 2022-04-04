@@ -13,6 +13,7 @@ import Errorpage from "./Errorpage";
 import LandingPage from "./LandingPage";
 import CompanyListing from "./BrandsPage/CompanyListing";
 import Footer from "./Footer";
+import MyOrder from "./MyOrder";
 
 function App() {
   return (
@@ -25,10 +26,6 @@ function App() {
         <Switch>
           <Route exact path="/">
             <LandingPage />
-          </Route>
-
-          <Route exact path="/shop/:id">
-            <ItemDetails />
           </Route>
 
           <Route exact path="/shop">
@@ -47,8 +44,16 @@ function App() {
             <CompanyListing />
           </Route>
 
+          <Route exact path="/order">
+            <MyOrder />
+          </Route>
+
           <Route path="">
             <Errorpage />
+          </Route>
+
+          <Route exact path="/shop/:id">
+            <ItemDetails />
           </Route>
         </Switch>
       </Main>
