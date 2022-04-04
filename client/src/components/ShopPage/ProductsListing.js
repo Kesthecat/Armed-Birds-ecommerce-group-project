@@ -33,12 +33,13 @@ const ProductsListing = () => {
 
 //might be better to use grid layout
 const Wrapper = styled.div`
+    width: 75vw;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    row-gap: 30px;
-    column-gap: 30px;
-    padding: 50px;
+    row-gap: 40px;
+    column-gap: 40px;
+    padding: 50px 0;
 `
 
 export default ProductsListing;
