@@ -13,7 +13,7 @@ export const OrderContext = createContext();
 const initialState = {
   status: "idle",
   error: null,
-  itemsPurchased: [], //array of item ids, names, quantities and prices
+  // itemsPurchased: [], //array of item ids, names, quantities and prices
   //has shape [{_id, name, price, quantity}]
 };
 
@@ -24,7 +24,6 @@ const reducer = (state, action) => {
         ...state,
         status: "items-selected",
         error: null,
-        // itemsToPurchase: action.selectedItems,
       };
     }
     case "cancel-order-process": {
@@ -37,14 +36,14 @@ const reducer = (state, action) => {
       return {
         ...state,
         status: "awaiting-response",
-        itemsPurchased: [...action.itemsPurchased],
+        // itemsPurchased: [...action.itemsPurchased],
       };
     }
     case "order-failure": {
       return {
         ...state,
         status: "error",
-        itemsPurchased: [],
+        // itemsPurchased: [],
         error: action.error,
       };
     }
@@ -55,9 +54,12 @@ const reducer = (state, action) => {
         // itemsPurchased: action.selectedItems,
       };
     }
-    case "after-order-reset": {
+    case "after-purchase-reset": {
       return {
-        ...initialState,
+        // ...initialState,
+        ...state,
+        status: "idle",
+        error: null,
       };
     }
     default: {
@@ -80,7 +82,18 @@ export const OrderContextProvider = ({ children }) => {
   //state to indicate whether to display Cart Modal or not
   const [displayModal, setDisplayModal] = useState(false);
 
-  const [lastOrder, setLastOrder] = useState(null);
+  //keep lastOrderId in session storage to fetch for the confirmation page
+  const [lastOrderId, setLastOrderId] = usePersistedState(
+    null,
+    "last-order-id"
+  );
+
+  // const [itemsPurchased, setItemsPurchased] = usePersistedState(
+  //   [],
+  //   "items-purchased"
+  // );
+
+  // const [itemsPurchased, setItemsPurchased] = useState([]);
 
   const beginOrderProcess = () => {
     dispatch({
@@ -97,14 +110,16 @@ export const OrderContextProvider = ({ children }) => {
   };
 
   const orderRequested = () => {
-    const newArr = [...selectedItems];
+    // const newArr = [...selectedItems];
+    // setItemsPurchased([...selectedItems]);
     dispatch({
       type: "order-processing",
-      itemsPurchased: newArr,
+      // itemsPurchased: newArr,
     });
   };
 
   const orderFailure = (errorMessage) => {
+    // setItemsPurchased([]);
     dispatch({
       type: "order-failure",
       error: errorMessage,
@@ -141,8 +156,8 @@ export const OrderContextProvider = ({ children }) => {
         setSelectedItems,
         displayModal,
         setDisplayModal,
-        lastOrder,
-        setLastOrder,
+        lastOrderId,
+        setLastOrderId,
       }}
     >
       {children}

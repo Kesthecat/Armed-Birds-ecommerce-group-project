@@ -1,59 +1,108 @@
 import styled from "styled-components";
 import PageWrapper from "../PageWrapper";
 import CartTable from "./CartTable";
-import { useContext } from "react";
+import { useContext, useEffect, useReducer } from "react";
+import { useHistory } from "react-router-dom";
 import ProductsLoading from "../ShopPage/ProductsLoading";
 import { OrderContext } from "./OrderContext";
 
+  const initialState = {
+      status: "loading", //idle, fetch-failed
+      order: null,
+      error: null,
+    };
+
+    const reducer = (state, action) => {
+      switch (action.type) {
+        case "order-loaded-from-server": {
+          return {
+            ...state,
+            status: "idle",
+            order: action.order,
+          };
+        }
+        case "error-fetching-order-from-server": {
+          return {
+            ...state,
+            status: "fetch-failed",
+            error: action.error,
+          };
+        }
+      }
+    };
+
 const Confirmation = () => {
-  //the lastOrder object is the exact order object that has been sent to the server
-  //the itemsPurchased object is an array of the items purchased with details -- this
-  //array will be used in the call to CartTable below (see **** ) to render the items
-  //purchased
-  //itemsPurchased has shape [{_id, name, imageSrc, price, quantity, itemTotal}]
-  //since we have these in state, we don't need to do a fetch for the confirmation
+
   const {
-    lastOrder,
-    state: { itemsPurchased, status },
+    lastOrderId,
+    state: { status },
     actions: { afterPurchaseReset },
   } = useContext(OrderContext);
-  console.log("last order", lastOrder, "itemsPurchased", itemsPurchased);
+  console.log("last order", lastOrderId);
 
-  if (status === "order-processing") {
-    return <ProductsLoading />;
-  } else {
-    //****************************
-    //need to have this reset state for the order context, so include this call right before your return
-    //   afterPurchaseReset();
+  const history = useHistory();
 
-    //*********************
-    //use cartTable component in the return to render the items purchased -- can go before or after all
-    //the order information you are displaying
+  const [lastOrder, dispatch] = useReducer(reducer, initialState);
 
-    let lastFour = lastOrder.creditCard.slice(-4);
+  //fetch the last order by id from the server
+    useEffect(() => {
+        fetch(`/get-order/${lastOrderId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("fetch last order data", data, data.data);
+          dispatch({
+            type: "order-loaded-from-server",
+            order: data.data,
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "error-fetching-order-from-server",
+            error: error,
+          });
+        });
+    }, []);
 
-    afterPurchaseReset();
+    let lastFour = "";
+    if (lastOrder.order) {
+      lastFour = lastOrder.order.creditCard.slice(-4);
+    }
+    
+    const handleClick = () => {
+      history.push("/");
+      afterPurchaseReset();
+    }
+    
+    if (status === "order-processing" || lastOrder.status === "loading") {
+        return <ProductsLoading />;
+      } 
 
     return (
       <PageWrapper>
         <h1>Thank you for your order!</h1>
         <Confirmwrapper>
-          <Orderinfo>Order Number: {lastOrder._id}</Orderinfo>
+          <Orderinfo>Order Number: {lastOrder.order._id}</Orderinfo>
           <Orderinfo>
-            Shipping Address: {lastOrder.streetAddress}, {lastOrder.city},{" "}
-            {lastOrder.province} {lastOrder.postalCode} {lastOrder.country}
+            Shipping Address: {lastOrder.order.streetAddress}, {lastOrder.order.city},{" "}
+            {lastOrder.order.province} {lastOrder.order.postalCode} {lastOrder.order.country}
           </Orderinfo>
-          <Orderinfo>Email: {lastOrder.email}</Orderinfo>
+          <Orderinfo>Email: {lastOrder.order.email}</Orderinfo>
           <Orderinfo>Payment Information: xxxx-xxxx-xxxx-{lastFour}</Orderinfo>
-          <Orderinfo>Expiry Date: {lastOrder.expiration}</Orderinfo>
-          <Orderinfo>Total: ${lastOrder.grandTotal}</Orderinfo>
+          <Orderinfo>Expiry Date: {lastOrder.order.expiration}</Orderinfo>
+          <Orderinfo>Total: ${lastOrder.order.grandTotal}</Orderinfo>
           <Orderinfo>Item Summary:</Orderinfo>
-          <CartTable itemArray={itemsPurchased} type="confirmation" />
+          <CartTable itemArray={lastOrder.order.products} type="confirmation" />
         </Confirmwrapper>
+
+        <ReturnButton onClick={handleClick}>BACK TO ARMED BIRDS!</ReturnButton>
       </PageWrapper>
     );
-  }
-};
+  };
 
 const Confirmwrapper = styled.div`
   display: flex;
@@ -75,4 +124,12 @@ const Orderinfo = styled.p`
   font-weight: bold;
 `;
 
+const ReturnButton = styled.button`
+    margin-top: 50px;
+    color: var(--color-main);
+    background-color: white;
+    width: 400px;
+    font-size: 18px;
+    align-self: center;
+`
 export default Confirmation;

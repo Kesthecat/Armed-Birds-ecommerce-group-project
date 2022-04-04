@@ -64,7 +64,7 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Category" && 
             <List>
                 {uniqueCategories.map((cat) => {
-                    return <button key={cat} className={cat} selected={(subfilter === cat)} onClick={handleClick} >{cat}</button>
+                    return <button key={cat} className={cat} selected={(filter === cat)} onClick={handleClick} >{cat}</button>
                 })}
             </List>
             )}
@@ -72,7 +72,7 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Body Location" && 
             <List>
                 {uniqueBodyLocations.map((loc) => {
-                    return <button key={loc} selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
+                    return <button key={loc} selected={(filter === loc)} onClick={handleClick} className={loc}>{loc}</button>
                 })}
             </List>
             )}
@@ -80,7 +80,7 @@ const ShopSidebar = () => {
             {( companiesStatus === "idle" && status === "idle" && filter === "Brand" && 
             <List>
                 {uniqueBrands.map((brand) => {
-                    return <button key={brand} selected={(subfilter === brand)} onClick={handleClick} className={brand}>{brand}</button>
+                    return <button key={brand} selected={(filter === brand)} onClick={handleClick} className={brand}>{brand}</button>
                 })}
             </List>
             )}
@@ -114,6 +114,7 @@ const List = styled.div`
         margin: 6px 10px 6px 20px;
         text-decoration: ${props => (props.selected ? "underline" : "none")};
         font-weight: ${props => (props.selected ? "bold" : "400")};
+        color: ${props => (props.selected ? "red" : "green")};
 
     }
 
