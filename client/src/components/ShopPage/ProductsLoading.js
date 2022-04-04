@@ -19,6 +19,8 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   row-gap: 30px;
   column-gap: 30px;
+  width: 75vw;
+  margin-top: 50px;
 `;
 
 export default ProductsLoading;
