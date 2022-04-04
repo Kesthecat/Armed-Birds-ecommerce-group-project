@@ -10,6 +10,10 @@ const CartTable = ({itemArray, type}) => {
     
     const { selectedItems, setSelectedItems } = useContext(OrderContext);
 
+    // if (type === "confirmation") {
+
+    // }
+
     const handleDelete = (e) => {
 
         //get className of the DeleteDiv, which contains the itemId
@@ -49,10 +53,11 @@ const CartTable = ({itemArray, type}) => {
     return (
         <Wrapper>
 
-            <Row>
-                {(type === "checkout" &&
+            <Row className={(type !== "cart") ? "large" : ""} >
+                {/* {(type !== "confirmation" &&
                     <HeaderDiv></HeaderDiv>
-                )}
+                )} */}
+                <HeaderDiv></HeaderDiv>
                 <HeaderDiv></HeaderDiv>
                 <HeaderDiv><p>SKU</p></HeaderDiv>
                 <HeaderDiv><p>Item</p></HeaderDiv>
@@ -63,16 +68,19 @@ const CartTable = ({itemArray, type}) => {
 
             {itemArray.map((item, index) => {
                 const priceNum = Number(item.price.slice(1));
-                return <Row shaded={(index%2 === 0)}>
-                     {(type === "checkout" &&
+                return <Row className={(type !== "cart") ? "large" : ""} shaded={(index%2 === 0)}>
+                     {(type !== "confirmation" &&
                         <DeleteDiv className={`${item._id}`} onClick={handleDelete}>&times;</DeleteDiv>
                      )}
+                     {(type === "confirmation" && 
+                        <div></div>
+                     )}
                     <div><img src={item.imageSrc} width="40px"/></div>
-                    <div>{item._id}</div>
-                    <div>{item.name}</div>
-                    <div>{item.quantity}</div>
-                    <div>{item.price}</div>
-                    <div>${priceNum*item.quantity}</div>
+                    <div><p>{(type === "confirmation") ? item.productId : item._id}</p></div>
+                    <div><p>{item.name}</p></div>
+                    <div><p>{item.quantity}</p></div>
+                    <div><p>{item.price}</p></div>
+                    <div><p>${priceNum*item.quantity}</p></div>
                 </Row>
             })
             }
@@ -82,8 +90,11 @@ const CartTable = ({itemArray, type}) => {
 }
 
 const Wrapper = styled.div`
-    margin: 10px;
+    margin: 10px auto;
+    width: 100%;
+
     div {
+        width: 100%;
         overflow-wrap: normal;
         text-align: center;
         margin: auto 0;
@@ -91,27 +102,36 @@ const Wrapper = styled.div`
         font-size: 14px;
         padding: 5px;
     }
+    .large{
+        p{
+            font-size: 20px;
+        }
+    }
+
 
     h4 {
         font-style: italic;
+        text-align: center;
+        width: 100%;
     }
 `
 const HeaderDiv = styled.div`
     p {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 18px;
     }
 `
 
 const Row = styled.div`
     width: 100%;
     display: grid;
-    /* grid-template-columns: 2fr 1fr 5fr 1fr 1fr 1fr; */
     grid-template-columns: 5% 11% 9% 41% 8% 12% 14%;
     grid-auto-rows: minmax(20px, auto);
-
     background-color: ${props => (props.shaded ? `var(--color-background)` : "white")};
 
+    p {
+        font-size: 15px;
+    }
 `
 const DeleteDiv = styled.div`
         cursor: pointer;

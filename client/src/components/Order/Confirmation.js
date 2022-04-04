@@ -86,16 +86,16 @@ const Confirmation = () => {
       <PageWrapper>
         <h1>Thank you for your order!</h1>
         <Confirmwrapper>
-          <Orderinfo>Order Number: {lastOrder.order._id}</Orderinfo>
+          <Orderinfo><span>Order Number:</span> {lastOrder.order._id}</Orderinfo>
           <Orderinfo>
-            Shipping Address: {lastOrder.order.streetAddress}, {lastOrder.order.city},{" "}
+            <span>Shipping Address:</span> {lastOrder.order.streetAddress}, {lastOrder.order.city},{" "}
             {lastOrder.order.province} {lastOrder.order.postalCode} {lastOrder.order.country}
           </Orderinfo>
-          <Orderinfo>Email: {lastOrder.order.email}</Orderinfo>
-          <Orderinfo>Payment Information: xxxx-xxxx-xxxx-{lastFour}</Orderinfo>
-          <Orderinfo>Expiry Date: {lastOrder.order.expiration}</Orderinfo>
-          <Orderinfo>Total: ${lastOrder.order.grandTotal}</Orderinfo>
-          <Orderinfo>Item Summary:</Orderinfo>
+          <Orderinfo><span>Email:</span> {lastOrder.order.email}</Orderinfo>
+          <Orderinfo><span>Payment Information:</span> xxxx-xxxx-xxxx-{lastFour}</Orderinfo>
+          <Orderinfo><span>Expiry Date:</span> {lastOrder.order.expiration}</Orderinfo>
+          <Orderinfo><span>Total:</span> ${lastOrder.order.grandTotal}</Orderinfo>
+          <Orderinfo><span>Item Summary:</span></Orderinfo>
           <CartTable itemArray={lastOrder.order.products} type="confirmation" />
         </Confirmwrapper>
 
@@ -107,7 +107,7 @@ const Confirmation = () => {
 const Confirmwrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 30px;
   width: 1000px;
   height: max-content;
   border-radius: 5px;
@@ -122,6 +122,10 @@ const Orderinfo = styled.p`
   font-size: 20px;
   padding: 10px;
   font-weight: bold;
+
+  span {
+    font-weight: bold;
+  }
 `;
 
 const ReturnButton = styled.button`

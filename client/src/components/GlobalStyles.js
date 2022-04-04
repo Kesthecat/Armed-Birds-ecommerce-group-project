@@ -65,9 +65,12 @@ export default createGlobalStyle`
   //additional resets
   a {
       text-decoration: none;
+      cursor: pointer;
+
       &:hover {
           color: var(--color-secondary);
       }
+
   }
   button {
       border: none;
@@ -76,9 +79,9 @@ export default createGlobalStyle`
       cursor: pointer;
       border-radius: 5px;
 
-    transition: 0.1s ease-in-out;
-
-    &:hover {
+      transition: 0.1s ease-in-out;
+    
+      &:hover {
         transform: scale(1.05);
     }
   }
