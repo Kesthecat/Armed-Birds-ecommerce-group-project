@@ -56,19 +56,19 @@ const ShopSidebar = () => {
                 <Dropdown array={filterOptions} label="Filter by:" stateSetter={setFilter} />
             </DropdownDiv>
 
-            {(( filter === "All" || filter === null) &&
+            {/* {(( filter === "All" || filter === null) &&
             <>
             </>
-            )}
+            )} */}
 
             {( status === "idle" && filter === "Category" && 
             <List>
                 {uniqueCategories.map((cat) => {
-                    console.log("subfilter, cat", subfilter, cat)
+                    let isMatched = false;
                     if (subfilter === cat) {
-                        console.log("matched")
+                        isMatched = true;
                     }
-                    return <button key={cat} selected={(subfilter === cat)} onClick={handleClick} className={cat}>{cat}</button>
+                    return <button key={cat} isMatched selected={(subfilter === cat)} onClick={handleClick} className={cat}>{cat}</button>
                 })}
             </List>
             )}
@@ -76,11 +76,11 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Body Location" && 
             <List>
                 {uniqueBodyLocations.map((loc) => {
-                    console.log("subfiltler, loc", subfilter, loc)
+                    let isMatched = false;
                     if (subfilter === loc) {
-                        console.log("matched")
+                        isMatched = true;
                     }
-                    return <button key={loc} selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
+                    return <button key={loc} isMatched selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
                 })}
             </List>
             )}
@@ -113,7 +113,7 @@ const List = styled.div`
         font-size: 18px;
         margin: 6px 10px 6px 20px;
         text-decoration: ${props => (props.selected ? "underline" : "none")};
-        color: ${props => (props.selected ? "red" : "green")};
+        /* color: ${props => (props.isMatched ? "red" : "green")}; */
     }
 
 `;

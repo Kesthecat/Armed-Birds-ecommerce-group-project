@@ -8,7 +8,7 @@ import styled from "styled-components";
 const Checkout = () => {
 
     const {
-        state: { itemsToPurchase, error, status },
+        state: { itemsPurchased, error, status },
         actions: { cancelOrderProcess, orderRequested, orderFailure, 
             orderSuccess }, selectedItems,
             setDisplayModal, setLastOrder
@@ -41,11 +41,8 @@ const Checkout = () => {
   const [discountCode, setDiscountCode] = useState(null);
 
   let subtotal = selectedItems.reduce((acc, item) => {
-        console.log("item total ltype", typeof item.itemTotal)
         return acc + Number(item.itemTotal);
       }, 0);
-
-  console.log("subtot", subtotal, typeof subtotal)
 
   //GST only
   let taxes = Number((0.05*subtotal).toFixed(2));
@@ -115,7 +112,6 @@ const Checkout = () => {
     }
 
     //check whether province entered is valid
-    console.log("prov type", typeof province)
     const isValidProvince = provinces.some((prov) => prov === province.toLowerCase());
     if (!isValidProvince) {
         setFormError("Please enter a Canadian province.")
@@ -147,8 +143,6 @@ const Checkout = () => {
             quantity: item.quantity
         }
     });
-
-    console.log( "products", products);
 
     const newOrder = {
         products: products,
@@ -191,6 +185,8 @@ const Checkout = () => {
                 
                 //reset order state and empty the cart
                 orderSuccess();
+                console.log("itemsPurchased", itemsPurchased)
+
             }
             //any other errors
             else {
