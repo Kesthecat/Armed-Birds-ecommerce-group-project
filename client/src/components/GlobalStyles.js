@@ -8,7 +8,7 @@ import { createGlobalStyle } from "styled-components";
 export default createGlobalStyle`
   :root {
     --color-main: #50479A; // dark slate blue
-    --color-secondary: 	#84A98C; //dark sea green
+    --color-secondary: 	#ad6f18; // dark maroon
     --color-background: #DAE0F2; 
     --color-text: #555555; //dark gray
     --font-heading: 'Quicksand', Arial, Helvetica, sans-serif;
