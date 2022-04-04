@@ -21,8 +21,7 @@ const LoadingDotDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 200px;
-  height: 100px;
+  min-height: 65vh;
 
   span {
     display: inline-block;
