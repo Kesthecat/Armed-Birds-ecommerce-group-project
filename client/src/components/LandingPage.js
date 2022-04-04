@@ -56,11 +56,11 @@ const LandingPage = () => {
     <PageWrapper>
       <IntroBanner>
         <TextWrapper>
-          <h1>Armed Birds</h1>
+          <Logo src="../Logo1.png" alt="Armed Bird Logo" />
           <h2>Birds of a feather, serving birds with difference since 2022.</h2>
           <h3>
             As not all birds have grown arms yet, we also carry products that
-            can be worn in other parts of the body.
+            can be worn on other parts of the body.
           </h3>
           <h3>Simply use the filter to shop by body parts.</h3>
         </TextWrapper>
@@ -79,7 +79,7 @@ const LandingPage = () => {
         })}
       </Featuring>
       <Testimonies>
-        <h2>Here are what some happy Birds have to say: </h2>
+        <Styledh2>Here are what some happy Birds have to say: </Styledh2>
         <TestimoniesWrapper>
           {testimonies.map((testimony) => {
             return (
@@ -98,14 +98,13 @@ const LandingPage = () => {
 const IntroBanner = styled.div`
   background-image: url(../banner.jpg);
   width: 100vw;
-  height: 425px;
+  height: 430px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 const TextWrapper = styled.div`
-  /* wonder how to made the background color only lower opacity */
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary-lower-opacity);
   width: 75vw;
   height: fit-content;
   display: flex;
@@ -114,7 +113,13 @@ const TextWrapper = styled.div`
   gap: 15px;
   padding: 20px;
   border-radius: 5px;
+  color: white;
 `;
+
+const Logo = styled.img`
+  height: 260px;
+`;
+
 const Featuring = styled.div`
   width: 75vw;
   display: flex;
@@ -122,17 +127,21 @@ const Featuring = styled.div`
   flex-wrap: wrap;
   row-gap: 40px;
   column-gap: 40px;
-  padding: 50px 0;
+  padding: 70px 0;
 `;
 const Testimonies = styled.div``;
+
+const Styledh2 = styled.h2`
+  color: var(--color-main);
+`;
 const TestimoniesWrapper = styled.div`
   width: 75vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
-  row-gap: 25px;
-  padding: 50px 0;
+  row-gap: 1px;
+  padding: 25px 0;
 `;
 const TestimonyWrapper = styled.div`
   max-height: fit-content;
@@ -140,17 +149,15 @@ const TestimonyWrapper = styled.div`
   flex-direction: column;
   padding: 15px;
   width: 70vw;
-  /* background-color: var(--color-secondary);
-  border-radius: 5px; */
   border-top: 2px solid var(--color-secondary);
 `;
 const Customer = styled.p`
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   padding-bottom: 10px;
 `;
 const Message = styled.p`
-  font-size: 30px;
+  font-size: 20px;
 `;
 
 export default LandingPage;
