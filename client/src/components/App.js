@@ -12,6 +12,7 @@ import CartModal from "./Order/CartModal";
 import Checkout from "./Order/Checkout";
 import Confirmation from "./Order/Confirmation";
 import Errorpage from "./Errorpage";
+import LandingPage from "./LandingPage";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
 
         <Switch>
           <Route exact path="/">
-            {/* <LandingPage /> */}
+            <LandingPage />
           </Route>
 
           <Route exact path="/shop/:id">

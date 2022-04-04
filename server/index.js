@@ -10,6 +10,7 @@ const { getItemById } = require("./handlers/getItemById");
 const { getItems } = require("./handlers/getItems");
 const { getOrders } = require("./handlers/getOrders");
 const { getOrderById } = require("./handlers/getOrderById");
+const { getFeaturedItems } = require("./handlers/getFeatureItems");
 
 const PORT = 4000;
 
@@ -38,6 +39,8 @@ express()
   .get("/get-company/:id", getCompanyById)
   .get("/get-orders", getOrders)
   .get("/get-order/:id", getOrderById)
+  .get("/get-featured-items", getFeaturedItems)
+
   .post("/add-order", addOrder)
 
   .delete("/delete-order/:id", deleteOrder)
