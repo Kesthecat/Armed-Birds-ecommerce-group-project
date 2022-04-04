@@ -8,17 +8,46 @@ import ProductsLoading from "./ProductsLoading";
 //grid of all the product preview cards, on the shop page
 const ProductsListing = () => {
 
-    const { state: { status, products } } = useContext(ProductsContext);
+    const { state: { status, products }, filter, subfilter } = useContext(ProductsContext);
     
     if (status === "loading") {
         return <ProductsLoading />;
     }
+
+    //array of products to display
+    let productsToRender = null;
+
+    //product key -- as the filter terms are not the same strings as the keys in each product object
+    let key = null;
+    if (filter === "Category") {
+        key = "category";
+    }
+    else if (filter === "Body Location") {
+        key = "body_location";
+    }
+    else if (filter === "Brand") {
+        key = "company"
+    }
+    
+    if (filter === "All" || !filter) {
+        productsToRender = products;
+    }
+    else {
+        //filter products by the filter/subfilter set
+        productsToRender = products.filter((item) => {
+            console.log("item[`${key}`]", item[`${key}`]);
+            if (item[`${key}`] === subfilter) {
+                return item;
+            }
+        })  
+    }
+    console.log("productstorender", productsToRender);
     
     return (
         <Wrapper>
             {( status === "idle" &&
             <>
-            {products.map((product) => {
+            {productsToRender.map((product) => {
                 return (
                     <NavLink to={`/shop/${product._id}` } key={product._id} >
                         <ProductPreview imageSrc={product.imageSrc} name={product.name} price={product.price} />
