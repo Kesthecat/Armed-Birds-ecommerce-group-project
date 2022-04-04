@@ -42,7 +42,7 @@ export default Errorpage;
 
 const Container = styled.div`
   padding-top: 40px;
-  height: 100%;
+  /* height: 100%; */
   margin: 0;
   font-size: 62.5%;
   font-family: "Lato", sans-serif;

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
-// import Footer from "./Footer"
 import ShopPage from "./ShopPage";
 import ItemDetails from "./ShopPage/ItemDetails";
 import CartModal from "./Order/CartModal";
@@ -48,18 +47,19 @@ function App() {
             <CompanyListing />
           </Route>
 
-          <Route path="/errorpage">
+          <Route path="">
             <Errorpage />
           </Route>
         </Switch>
-        <Footer />
       </Main>
+      <Footer />
     </BrowserRouter>
   );
 }
 
 const Main = styled.div`
   position: relative;
+  min-height: calc(100vh - 160px);
 `;
 
 export default App;

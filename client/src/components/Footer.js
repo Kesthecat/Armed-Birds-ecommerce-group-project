@@ -17,9 +17,11 @@ const Footer = () => {
 
 const Container = styled.div`
   height: 80px;
+  /* width: 99vw; */
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   background-color: var(--color-main);
   padding: 0 100px;
   color: white;

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Errorpage from "./Errorpage";
 import PageWrapper from "./PageWrapper";
+import ItemLoader from "./ShopPage/ItemLoader";
 import ProductPreview from "./ShopPage/ProductPreview";
 
 // LandingPage (home) page
@@ -49,7 +50,7 @@ const LandingPage = () => {
 
   //   console.log("feature items", featureItems);
 
-  if (featureItemsStatus === "loading") return <div>Loading</div>;
+  if (featureItemsStatus === "loading") return <ItemLoader />;
   if (featureItemsStatus === "fetch-error") return <Errorpage />;
 
   return (
@@ -106,7 +107,7 @@ const IntroBanner = styled.div`
 const TextWrapper = styled.div`
   background-color: var(--color-secondary-lower-opacity);
   width: 75vw;
-  height: fit-content;
+  height: 430px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,7 +122,7 @@ const Logo = styled.img`
 `;
 
 const Featuring = styled.div`
-  width: 75vw;
+  width: 100vw;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -129,13 +130,15 @@ const Featuring = styled.div`
   column-gap: 40px;
   padding: 70px 0;
 `;
-const Testimonies = styled.div``;
+const Testimonies = styled.div`
+  width: 1000px;
+`;
 
 const Styledh2 = styled.h2`
   color: var(--color-main);
 `;
 const TestimoniesWrapper = styled.div`
-  width: 75vw;
+  width: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -148,7 +151,7 @@ const TestimonyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
-  width: 70vw;
+  width: inherit;
   border-top: 2px solid var(--color-secondary);
 `;
 const Customer = styled.p`
