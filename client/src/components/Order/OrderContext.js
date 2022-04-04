@@ -32,10 +32,11 @@ const reducer = (state, action) => {
                 ...initialState
             }
         }
-        case ("order-processing"): { //can use for spinner on the checkout button etc
+        case ("order-processing"): { 
             return {
                 ...state,
                 status: "awaiting-response",
+                itemsPurchased: [...action.itemsPurchased]
             }
             
         }
@@ -43,14 +44,15 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 status: "error",
+                itemsPurchased: null,
                 error: action.error, 
             }
         }
         case ("order-success"): { 
             return {
-                ...initialState,
+                ...state,
                 status: "purchased",
-                itemsPurchased: action.selectedItems, 
+                // itemsPurchased: action.selectedItems, 
             }
         }
         case ("after-order-reset"): {
@@ -94,8 +96,10 @@ export const OrderContextProvider = ({children}) => {
     };
 
     const orderRequested = () => {
+        const newArr = [...selectedItems];
         dispatch({
             type: "order-processing",
+            itemsPurchased: newArr,
         })
     };
 
@@ -107,13 +111,12 @@ export const OrderContextProvider = ({children}) => {
     }
 
     const orderSuccess = () => {
-        dispatch({
-            type: "order-success",
-            itemsPurchased: selectedItems,
-        })
-        //empty the cart
-        setSelectedItems([]);
 
+       dispatch({
+            type: "order-success",
+       })
+      //empty the cart
+        setSelectedItems([]);
     }
 
     const afterPurchaseReset = () => {
