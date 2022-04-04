@@ -30,19 +30,25 @@ const Confirmation = () => {
     //use cartTable component in the return to render the items purchased -- can go before or after all
     //the order information you are displaying
 
+    let lastFour = lastOrder.creditCard.slice(-4);
+
+    afterPurchaseReset();
+
     return (
       <PageWrapper>
         <h1>Thank you for your order!</h1>
         <Confirmwrapper>
-          <Orderinfo>Item Summary:</Orderinfo>
-          <CartTable itemArray={itemsPurchased} type="confirmation" />
-          <Orderinfo>Total: ${lastOrder.grandTotal}</Orderinfo>
           <Orderinfo>Order Number: {lastOrder._id}</Orderinfo>
           <Orderinfo>
             Shipping Address: {lastOrder.streetAddress}, {lastOrder.city},{" "}
             {lastOrder.province} {lastOrder.postalCode} {lastOrder.country}
           </Orderinfo>
           <Orderinfo>Email: {lastOrder.email}</Orderinfo>
+          <Orderinfo>Payment Information: xxxx-xxxx-xxxx-{lastFour}</Orderinfo>
+          <Orderinfo>Expiry Date: {lastOrder.expiration}</Orderinfo>
+          <Orderinfo>Total: ${lastOrder.grandTotal}</Orderinfo>
+          <Orderinfo>Item Summary:</Orderinfo>
+          <CartTable itemArray={itemsPurchased} type="confirmation" />
         </Confirmwrapper>
       </PageWrapper>
     );
