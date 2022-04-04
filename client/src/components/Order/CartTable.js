@@ -34,6 +34,10 @@ const CartTable = ({itemArray, type}) => {
 
     }
 
+    if (type === "confirmation" && (itemArray.length === 0 || !itemArray)) {
+        return <Wrapper></Wrapper>
+    }
+    
     if (itemArray.length === 0) {
         return (
             <Wrapper>

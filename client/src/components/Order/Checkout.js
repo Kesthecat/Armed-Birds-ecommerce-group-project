@@ -89,6 +89,16 @@ const Checkout = () => {
           return;
       }
 
+      if (typeof creditCard !== "number" || creditCard.length !== 16) {
+        setFormError("Credit card number must be 16 numerals, no spaces.")
+          return;
+      }
+
+      if (typeof expiration !== "number" || expiration.length !== 4) {
+        setFormError("Expiration date must be in MMYY numeric form.")
+          return;
+      }
+
       const provinces = [ "newfoundland", "nl", 
                         "prince edward island", "pe",
                         "nova scotia", "ns", 

@@ -64,11 +64,11 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Category" && 
             <List>
                 {uniqueCategories.map((cat) => {
-                    let isMatched = false;
-                    if (subfilter === cat) {
-                        isMatched = true;
-                    }
-                    return <button key={cat} isMatched selected={(subfilter === cat)} onClick={handleClick} className={cat}>{cat}</button>
+                    // let isMatched = false;
+                    // if (subfilter === cat) {
+                    //     isMatched = true;
+                    // }
+                    return <button key={cat} className={cat} selected={(subfilter === cat)} onClick={handleClick} >{cat}</button>
                 })}
             </List>
             )}
@@ -76,11 +76,11 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Body Location" && 
             <List>
                 {uniqueBodyLocations.map((loc) => {
-                    let isMatched = false;
-                    if (subfilter === loc) {
-                        isMatched = true;
-                    }
-                    return <button key={loc} isMatched selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
+                    // let isMatched = false;
+                    // if (subfilter === loc) {
+                    //     isMatched = true;
+                    // }
+                    return <button key={loc} selected={(subfilter === loc)} onClick={handleClick} className={loc}>{loc}</button>
                 })}
             </List>
             )}
@@ -113,7 +113,8 @@ const List = styled.div`
         font-size: 18px;
         margin: 6px 10px 6px 20px;
         text-decoration: ${props => (props.selected ? "underline" : "none")};
-        /* color: ${props => (props.isMatched ? "red" : "green")}; */
+        font-weight: ${props => (props.selected ? "bold" : "400")};
+
     }
 
 `;
