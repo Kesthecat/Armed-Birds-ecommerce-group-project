@@ -2,173 +2,100 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { OrderContext } from "./Order/OrderContext";
-import { AiOutlineSearch } from "react-icons/ai";
-import { BsSearch } from "react-icons/bs";
 import { MdOutlineShoppingBasket } from "react-icons/md";
 
-// import SearchIcon from "@material-ui/icons/Search";
-// import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
-
 const Header = () => {
-  const { displayModal, setDisplayModal } = useContext(OrderContext);
+  const { displayModal, setDisplayModal, selectedItems } =
+    useContext(OrderContext);
+
+  let itemsTally = 0;
+  selectedItems.forEach(
+    (item) => (itemsTally = itemsTally + Number(item.quantity))
+  );
 
   const handleClick = () => {
     setDisplayModal(true);
   };
 
   return (
-    <HeaderContauner>
-      <img src="./Logo.png" alt="Armed-Bird" />
-      {/* <Search>
-        <input type="text" />
-        <SearchWrapper>
-          <BsSearch />
-        </SearchWrapper>
-      </Search> */}
+    <HeaderContainer>
+      <HeaderNavLink to="/">
+        <img src="./Logo.png" alt="Armed-Bird" />
+      </HeaderNavLink>
       <HeaderNav>
         <Shop>
-          <NavLink
-            activeClassName="active"
-            activeStyle={{ color: "white" }}
-            color="white"
-            to="/shop"
-          >
-            Shop
-          </NavLink>
+          <HeaderNavLink to="/shop">Shop</HeaderNavLink>
         </Shop>
-
-        <About>
-          <NavLink
-            activeClassName="active"
-            activeStyle={{ color: "white" }}
-            to="/about"
-            style={{ textdecoration: "none" }}
-          >
-            About{" "}
-          </NavLink>
-        </About>
-
         <Brand>
-          <NavLink
-            activeClassName="active"
-            activeStyle={{ color: "white" }}
-            color="white"
-            to="/brands"
-          >
-            Brand{" "}
-          </NavLink>
+          <HeaderNavLink to="/brands">Brands </HeaderNavLink>
         </Brand>
-
-        {/* <Cart onClick={handleClick}>
-          Cart<span>0</span>
-        </Cart> */}
         <BasketWrapper onClick={handleClick}>
-          <MdOutlineShoppingBasket size="20px" />
-          <span>0</span>
+          <MdOutlineShoppingBasket size="30px" />
+          <Tally>{itemsTally}</Tally>
         </BasketWrapper>
       </HeaderNav>
-    </HeaderContauner>
+    </HeaderContainer>
   );
 };
 
 export default Header;
 
-const HeaderContauner = styled.div`
+const HeaderContainer = styled.div`
   height: 100px;
   display: flex;
   align-items: center;
   background-color: var(--color-main);
   position: sticky;
-
   top: 0;
   z-index: 100;
+  justify-content: space-between;
 
   img {
     width: 160px;
     object-fit: contain;
     margin: 0 40px;
-    /* padding-left: 20px; */
   }
 `;
 
-// const Search = styled.div`
-//   display: flex;
-//   flex: 1;
-//   align-items: center;
-//   border-radius: 24px;
-//   height: 14px;
-
-//   input {
-//     height: 12px;
-//     padding: 10px;
-//     border: none;
-//     width: 80%;
-//   }
-// `;
-
-// const SearchWrapper = styled.div`
-//   padding: 8px;
-//   height: 32px !important;
-//   background-color: #cd9042;
-// `;
-
+const Tally = styled.span`
+  font-weight: bold;
+`;
 const HeaderNav = styled.div`
   display: flex;
-  margin: 0 320px;
-  padding: 0 300px;
   justify-content: space-between;
   font-family: var(--font-subheading);
   font-size: 20px;
+  align-items: center;
+  width: max-content;
 `;
 
+const HeaderNavLink = styled(NavLink)`
+  color: white;
+  font-size: 25px;
+`;
 const Shop = styled.div`
-  /* display: flex;
-  flex-direction: column; */
   margin-left: 30px;
   margin-right: 10px;
   color: white;
 `;
-
-const About = styled.div`
-  /* display: flex; */
-
-  margin-left: 30px;
-  margin-right: 10px;
-`;
-
-// const Cart = styled.div`
-//   /* display: flex; */
-
-//   margin-left: 10px;
-//   margin-right: 10px;
-//   color: white;
-
-//   span {
-//     /* padding: 5px; */
-//   }
-// `;
 
 const BasketWrapper = styled.div`
   display: flex;
   align-items: center;
   color: white;
-  margin-left: 120px;
-  margin-right: 10px;
+  padding: 0 30px;
+  cursor: pointer;
 
   span {
     margin-left: 10px;
     margin-right: 10px;
-    font-size: 16px;
+    font-size: 25px;
     margin-top: 8px;
   }
 `;
 
 const Brand = styled.div`
   display: flex;
-
   margin-left: 30px;
   margin-right: 10px;
 `;
-// const NavLink = styled.link``;
-
-// const NavLink = styled.link``;
