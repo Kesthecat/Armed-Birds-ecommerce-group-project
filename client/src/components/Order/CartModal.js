@@ -56,7 +56,7 @@ const CartModal = () => {
     const Modal = styled.div`
         display: ${props => (props.isDisplay ? 'block' : 'none')};
         position: fixed; 
-        z-index: 1; 
+        z-index: 100; 
         top: 0;
         right: 0;
         width: 100%;

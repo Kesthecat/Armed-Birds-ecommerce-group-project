@@ -38,7 +38,7 @@ const SoldOutTag = styled.p`
     top: 13px;
     right: 13px;
     text-align: right;
-    z-index: 10;
+    z-index: 1;
     font-family: Mulish;
     font-size: 18px;
     color: var(--color-secondary);
