@@ -25,6 +25,7 @@ const Wrapper = styled.div`
     height: 400px;
     background-color: var(--color-background); 
     border-radius: 5px;
+    box-shadow: 0 0 3px 3px var(--color-secondary);
 `
 const ImgDiv = styled.div`
     display: flex;
@@ -34,6 +35,7 @@ const ImgDiv = styled.div`
     height: 200px;
     margin: 15px;
     border-radius: 10px;
+    /* border: 5px solid var(--color-secondary); */
 
     img {
         height: 160px;

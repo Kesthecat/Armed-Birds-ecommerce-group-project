@@ -8,10 +8,10 @@ import styled from "styled-components";
 const Checkout = () => {
 
     const {
-        state: { itemsPurchased, error, status },
+        state: { error, status },
         actions: { cancelOrderProcess, orderRequested, orderFailure, 
             orderSuccess }, selectedItems,
-            setDisplayModal, setLastOrder
+            setDisplayModal, setLastOrderId
         } = useContext(OrderContext);
         
     //shipping is a flat rate for now
@@ -89,15 +89,15 @@ const Checkout = () => {
           return;
       }
 
-      if (typeof creditCard !== "number" || creditCard.length !== 16) {
-        setFormError("Credit card number must be 16 numerals, no spaces.")
-          return;
-      }
+      // if (typeof creditCard !== "number" || creditCard.length !== 16) {
+      //   setFormError("Credit card number must be 16 numerals, no spaces.")
+      //     return;
+      // }
 
-      if (typeof expiration !== "number" || expiration.length !== 4) {
-        setFormError("Expiration date must be in MMYY numeric form.")
-          return;
-      }
+      // if (typeof expiration !== "number" || expiration.length !== 4) {
+      //   setFormError("Expiration date must be in MMYY numeric form.")
+      //     return;
+      // }
 
       const provinces = [ "newfoundland", "nl", 
                         "prince edward island", "pe",
@@ -150,7 +150,10 @@ const Checkout = () => {
     let products = selectedItems.map((item) => { 
         return {
             productId: item._id, 
-            quantity: item.quantity
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity, 
+            imageSrc: item.imageSrc,
         }
     });
 
@@ -187,15 +190,15 @@ const Checkout = () => {
 
             if (data.status === 200) {
             
-                //keep this order in state for the confirmation page
-                setLastOrder(data.data);
+                //keep this order id in session storage for the confirmation page
+                setLastOrderId(data.data._id);
                 
                 //redirect to confirmation page
                 history.push("./confirmation");
                 
                 //reset order state and empty the cart
                 orderSuccess();
-                console.log("itemsPurchased", itemsPurchased)
+                // console.log("itemsPurchased", itemsPurchased)
 
             }
             //any other errors
@@ -233,6 +236,7 @@ const Checkout = () => {
                 <SubtotalChanges>DISCOUNT CODE: </SubtotalChanges>
                 <StyledFormDiscount onSubmit={(e) => handleSubmitDiscount(e)}>
                     <input type="text" placeholder="ex: ARMED" onChange={(e) => setDiscountCode(e.target.value)}/>
+                    <button>Add discount</button>
                 </StyledFormDiscount>
             </div>
 
@@ -363,9 +367,21 @@ const DiscountWrapper = styled.div`
 `;
 
 const StyledFormDiscount = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* justify-content: center; */
     input {
         margin-left: 10px;
-}`;
+    }
+
+    button {
+      padding: 5px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      margin: 5px 0;
+    }
+`;
 
 
 const TotalWrapper = styled.div`
@@ -431,14 +447,6 @@ const ConfirmBtn = styled.button`
     padding: 15px 18px;
     margin: 10px 0;
     width: 300px;
-
-
-  transition: 0.1s ease-in-out;
-
-  &:hover {
-
-    transform: scale(1.05);
-  }
 `;
 
 const CancelButton = styled.button`
