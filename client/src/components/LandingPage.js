@@ -58,7 +58,7 @@ const LandingPage = () => {
       <IntroBanner>
         <TextWrapper>
           <Logo src="../Logo1.png" alt="Armed Bird Logo" />
-          <h2>Birds of a feather, serving birds with difference since 2022.</h2>
+          <h2>Birds of a feather, serving birds with differences since 2022.</h2>
           <h3>
             As not all birds have grown arms yet, we also carry products that
             can be worn on other parts of the body.
@@ -74,6 +74,7 @@ const LandingPage = () => {
                 imageSrc={item.imageSrc}
                 name={item.name}
                 price={item.price}
+                type="featured"
               />
             </NavLink>
           );
