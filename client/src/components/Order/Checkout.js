@@ -200,11 +200,12 @@ const Checkout = () => {
                 //keep this order id in session storage for the confirmation page
                 setLastOrderId(data.data._id);
                 
+                //reset order state and empty the cart
+                orderSuccess();
+                
                 //redirect to confirmation page
                 history.push("./confirmation");
                 
-                //reset order state and empty the cart
-                orderSuccess();
             }
             //for any other non-500 errors, keep track of server message
             else {

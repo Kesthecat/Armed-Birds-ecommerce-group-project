@@ -106,11 +106,11 @@ export const OrderContextProvider = ({ children }) => {
   };
 
   const orderSuccess = () => {
+    //empty the cart
+    setSelectedItems([]);
     dispatch({
       type: "order-success",
     });
-    //empty the cart
-    setSelectedItems([]);
   };
 
   const afterPurchaseReset = () => {
