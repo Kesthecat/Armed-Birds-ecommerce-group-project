@@ -62,6 +62,8 @@ const ItemDetails = () => {
   //track state and loading of Item details
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const [toRender, setToRender] = useState("false");
+
   const { id } = useParams();
 
   const history = useHistory();
@@ -78,6 +80,10 @@ const ItemDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.status !== 200) {
+          history.push("/erropage");
+          return;
+        }
         dispatch({
           type: "item-loaded-from-server",
           item: data.data,
@@ -96,6 +102,7 @@ const ItemDetails = () => {
               type: "company-loaded-from-server",
               company: data.data,
             });
+            setToRender(true);
           })
           .catch((error) => {
             dispatch({
@@ -134,7 +141,7 @@ const ItemDetails = () => {
 
     if (itemInCart) {
       itemInCart.quantity = Number(itemInCart.quantity) + Number(quantity);
-  
+
       let newArr = [...selectedItems];
       newArr[index] = itemInCart;
 
@@ -161,64 +168,60 @@ const ItemDetails = () => {
     history.push("/shop");
   };
 
-  //Loading component while fetches are being done 
+  //Loading component while fetches are being done
   if (state.itemStatus === "loading" || state.companyStatus === "loading")
     return <ItemLoader />;
 
-  return (
-    <PageWrapper>
-      <BackLink>
-        <NavLink to="/shop">BACK TO SHOP</NavLink>
-      </BackLink>
+  if (toRender)
+    return (
+      <PageWrapper>
+        <BackLink>
+          <NavLink to="/shop">BACK TO SHOP</NavLink>
+        </BackLink>
 
-      {state.itemStatus === "idle" && state.companyStatus === "idle" && (
-        <ProductCard>
-          
-          <ImgDiv>
-            <img src={state.item.imageSrc} width="350px" />
-          </ImgDiv>
-          
-          <InfoDiv>
-           
-            <ProductName>{state.item.name}</ProductName>
-           
-            <Company>
-              Sold by:{" "}
-              <StyledATag href={state.company.url} target="_blank">
-                {state.company.name}
-              </StyledATag>
-            </Company>
-            
-            <Price>{state.item.price}</Price>
-            
-            <Description>
-              Wear it on your{" "}
-              <span>{state.item.body_location.toLowerCase()}</span>!
-            </Description>
+        {state.itemStatus === "idle" && state.companyStatus === "idle" && (
+          <ProductCard>
+            <ImgDiv>
+              <img src={state.item.imageSrc} width="350px" />
+            </ImgDiv>
 
-            <Dropdown
-              array={dropdownArray}
-              label="Quantity"
-              stateSetter={setQuantity}
-            />
-            <InStock>
-              {state.item.numInStock > 0 ? "In Stock" : "Out of Stock"}
-            </InStock>
+            <InfoDiv>
+              <ProductName>{state.item.name}</ProductName>
 
-            <BuyButton
-              onClick={handleClick}
-              disabled={state.item.numInStock === 0 || quantity < 1}
-            >
-              BUY
-            </BuyButton>
-          
-          </InfoDiv>
-        
-        </ProductCard>
-      )}
+              <Company>
+                Sold by:{" "}
+                <StyledATag href={state.company.url} target="_blank">
+                  {state.company.name}
+                </StyledATag>
+              </Company>
 
-    </PageWrapper>
-  );
+              <Price>{state.item.price}</Price>
+
+              <Description>
+                Wear it on your{" "}
+                <span>{state.item.body_location.toLowerCase()}</span>!
+              </Description>
+
+              <Dropdown
+                array={dropdownArray}
+                label="Quantity"
+                stateSetter={setQuantity}
+              />
+              <InStock>
+                {state.item.numInStock > 0 ? "In Stock" : "Out of Stock"}
+              </InStock>
+
+              <BuyButton
+                onClick={handleClick}
+                disabled={state.item.numInStock === 0 || quantity < 1}
+              >
+                BUY
+              </BuyButton>
+            </InfoDiv>
+          </ProductCard>
+        )}
+      </PageWrapper>
+    );
 };
 
 const BackLink = styled.div`
