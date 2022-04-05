@@ -93,6 +93,10 @@ const PageLink = styled.div`
   margin-right: 10px;
   color: white;
 
+  &:hover {
+    color: var(--color-secondary);
+  }
+  
   .active {
     color: var(--color-secondary);
   }
@@ -104,6 +108,10 @@ const BasketWrapper = styled.div`
   color: white;
   padding: 0 30px;
   cursor: pointer;
+
+  &:hover {
+    color: var(--color-secondary);
+  }
 
   span {
     margin-left: 10px;
