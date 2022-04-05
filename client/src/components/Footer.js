@@ -6,7 +6,7 @@ const Footer = () => {
       <h3>Welcoming birds of all shape.</h3>
       <h3>
         Contact:{" "}
-        <Styleda href="mailto: armedbirds@birds.com">
+        <Styleda href="mailto: armedbirds@birds.com" target="_blank">
           armedbirds@birds.com
         </Styleda>{" "}
       </h3>

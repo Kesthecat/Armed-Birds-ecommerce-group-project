@@ -80,9 +80,9 @@ const LandingPage = () => {
       <Testimonies>
         <Styledh2>Here are what some happy Birds have to say: </Styledh2>
         <TestimoniesWrapper>
-          {testimonies.map((testimony) => {
+          {testimonies.map((testimony, i) => {
             return (
-              <TestimonyWrapper>
+              <TestimonyWrapper key={i}>
                 <Customer>{testimony.customer} :</Customer>
                 <Message>{testimony.message}</Message>
               </TestimonyWrapper>
@@ -97,7 +97,7 @@ const LandingPage = () => {
 const IntroBanner = styled.div`
   background-image: url(../banner.jpg);
   width: 99vw;
-  height: 430px;
+  height: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,10 +105,11 @@ const IntroBanner = styled.div`
 const TextWrapper = styled.div`
   background-color: var(--color-secondary-lower-opacity);
   width: 75vw;
-  height: 430px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 15px;
   padding: 20px;
   border-radius: 5px;
@@ -116,7 +117,7 @@ const TextWrapper = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 260px;
+  height: 220px;
 `;
 
 const Featuring = styled.div`

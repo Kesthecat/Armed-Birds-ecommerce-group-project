@@ -14,8 +14,8 @@ const Dropdown = ({ array, label, stateSetter, type }) => {
   return (
     <Wrapper>
       <label className={(type === "sidebar") ? "bolded" : ""}>{label}</label>
-      <select onChange={handleSelect} name="chooseQty" id="chooseQty">
-        <option selected disabled value={"Choose"}>
+      <select defaultValue="Choose" onChange={handleSelect} name="chooseQty" id="chooseQty">
+        <option disabled value={"Choose"}>
           Choose:
         </option>
         {array.map((el) => {
