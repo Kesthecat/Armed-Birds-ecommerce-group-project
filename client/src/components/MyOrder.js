@@ -84,8 +84,9 @@ const MyOrder = () => {
           </Container>
         )}
       </div>
-
-      <ReturnButton onClick={handleClick}>BACK TO ARMED BIRDS!</ReturnButton>
+      <Message>
+        Please contact customer services for any question regarding your order.
+      </Message>
     </PageWrapper>
   );
 };
@@ -113,12 +114,6 @@ const Orderinfo = styled.p`
   font-weight: bold;
 `;
 
-const ReturnButton = styled.button`
-  margin-top: 50px;
-  color: var(--color-main);
-  background-color: white;
-  width: 400px;
-  font-size: 18px;
-  align-self: center;
-`;
+const Message = styled.h2``;
+
 export default MyOrder;
