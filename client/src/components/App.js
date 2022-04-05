@@ -64,7 +64,8 @@ function App() {
 
 const Main = styled.div`
   position: relative;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 180px);
+  overflow: hidden;
 `;
 
 export default App;

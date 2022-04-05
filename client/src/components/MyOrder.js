@@ -1,4 +1,3 @@
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -6,21 +5,26 @@ import PageWrapper from "./PageWrapper";
 import ItemLoader from "./ShopPage/ItemLoader";
 import CartTable from "./Order/CartTable";
 
+// b3ce12ba-35d8-4f74-b8f6-09f41cd6aa4f
+
 const MyOrder = () => {
+  //set state for the input value
+  //   const [inputValue, setInputValue] = useState("");
   //set states for the id, order and loading status
   const [orderId, setOrderId] = useState(null);
   const [order, setOrder] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState("idle"); //"loading", "done", "fetch-error"
-  const history = useHistory();
+  const [lastFour, setLastFour] = useState("");
 
-  let lastFour = "";
-
-  const handleClick = () => {
-    history.push("/");
-  };
+  //   const handleChange = (e) => {
+  //     // setInputValue(e.taget.value);
+  //     setOrderId(e.target.value);
+  //   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // setOrderId(inputValue);
+    // console.log("id", orderId);
     setLoadingStatus("loading");
 
     fetch(`/get-order/${orderId}`, {
@@ -31,67 +35,124 @@ const MyOrder = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
-        const creditCard = data.data.creditCard;
-        console.log("creditCard", creditCard.slice(-4));
-        lastFour = creditCard.slice(-4);
         setOrder(data.data);
-        setLoadingStatus("done");
+        console.log("data", data);
+        if (data.status === 200) {
+          const creditCard = data.data.creditCard;
+          setLastFour(creditCard.slice(-4));
+          setLoadingStatus("done");
+        }
+        if (data.status !== 200) {
+          setLoadingStatus("fetch-error");
+        }
       })
       .catch((error) => {
         setLoadingStatus("fetch-error");
         setOrder(error);
       });
+    // setInputValue("");
   };
-  console.log("id", orderId);
-  console.log("order", order);
-  //   console.log("order credicard", order.creditCard);
-
-  //   if (.order) {
-  //      = data.creditCard.slice(-4);
-  //   }
 
   return (
     <PageWrapper>
       <h1>Enter your order number to search for your order:</h1>
-      <div>
+      <StyledDiv>
         <StyledForm onSubmit={(e) => handleSubmit(e)}>
-          <input type="text" onChange={(e) => setOrderId(e.target.value)} />
-          <button>Search</button>
+          <StyledInput
+            type="text"
+            // value={inputValue}
+            required
+            onChange={(e) => setOrderId(e.target.value)}
+          />
+          <StyledButton>Search</StyledButton>
         </StyledForm>
-      </div>
-      <div>
+      </StyledDiv>
+      <StyledDiv>
         {loadingStatus === "loading" && <ItemLoader />}
-        {loadingStatus === "fetch-error" && <h2>{order}</h2>}
+        {loadingStatus === "fetch-error" && (
+          <>
+            <StyledH3>
+              Order number: <span>{orderId}</span> not found.
+            </StyledH3>
+            <StyledH3>Please contact customer services.</StyledH3>
+          </>
+        )}
         {loadingStatus === "done" && (
-          <Container>
-            <h2>This is your order accoring to your order number {orderId}</h2>
+          <>
+            <StyledH3>
+              This is your order according to your order number :
+            </StyledH3>
+            <StyledH3>
+              <span>{orderId}</span>
+            </StyledH3>
             <Confirmwrapper>
-              <Orderinfo>Order Number: {order._id}</Orderinfo>
               <Orderinfo>
-                Shipping Address: {order.streetAddress}, {order.city},{" "}
-                {order.province} {order.postalCode} {order.country}
+                <span>Order Number: </span> {order._id}
               </Orderinfo>
-              <Orderinfo>Email: {order.email}</Orderinfo>
               <Orderinfo>
-                Payment Information: xxxx-xxxx-xxxx-{lastFour}
+                <span>Shipping Address: </span>
+                {order.streetAddress}, {order.city}, {order.province}{" "}
+                {order.postalCode} {order.country}
               </Orderinfo>
-              <Orderinfo>Expiry Date: {order.expiration}</Orderinfo>
-              <Orderinfo>Total: ${order.grandTotal}</Orderinfo>
-              <Orderinfo>Item Summary:</Orderinfo>
+              <Orderinfo>
+                <span>Email: </span>
+                {order.email}
+              </Orderinfo>
+              <Orderinfo>
+                <span>Payment Information: </span>xxxx-xxxx-xxxx-{lastFour}
+              </Orderinfo>
+              <Orderinfo>
+                <span>Expiry Date: </span>
+                {order.expiration}
+              </Orderinfo>
+              <Orderinfo>
+                <span>Total: </span>${order.grandTotal}
+              </Orderinfo>
+              <Orderinfo>
+                <span>Item Summary:</span>
+              </Orderinfo>
               <CartTable itemArray={order.products} type="confirmation" />
             </Confirmwrapper>
-          </Container>
+            <Message>
+              Please contact customer services for any question regarding your
+              order.
+            </Message>
+          </>
         )}
-      </div>
-
-      <ReturnButton onClick={handleClick}>BACK TO ARMED BIRDS!</ReturnButton>
+      </StyledDiv>
     </PageWrapper>
   );
 };
 
-const StyledForm = styled.form``;
-const Container = styled.div``;
+const StyledH3 = styled.h3`
+  margin: 10px 0;
+
+  span {
+    font-style: italic;
+  }
+`;
+
+const StyledForm = styled.form`
+  margin-bottom: 20px;
+`;
+const StyledInput = styled.input`
+  height: 30px;
+  width: 465px;
+  padding: 0 10px;
+  font-size: 25px;
+  margin: 25px 0;
+`;
+const StyledButton = styled.button`
+  height: 35px;
+  font-size: 25px;
+  margin-left: 10px;
+`;
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Confirmwrapper = styled.div`
   display: flex;
@@ -110,15 +171,14 @@ const Confirmwrapper = styled.div`
 const Orderinfo = styled.p`
   font-size: 20px;
   padding: 10px;
-  font-weight: bold;
+
+  span {
+    font-weight: bold;
+  }
 `;
 
-const ReturnButton = styled.button`
-  margin-top: 50px;
-  color: var(--color-main);
-  background-color: white;
-  width: 400px;
-  font-size: 18px;
-  align-self: center;
+const Message = styled.h3`
+  margin-top: 40px;
 `;
+
 export default MyOrder;
