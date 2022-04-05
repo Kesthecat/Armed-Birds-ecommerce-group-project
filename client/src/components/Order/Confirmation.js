@@ -67,12 +67,14 @@ const Confirmation = () => {
           error: error,
         });
       });
-    }, []);
+    }, [])
 
     //last four digits of the credit card number for formatting
     let lastFour = "";
-    if (lastOrder.order) {
-      lastFour = lastOrder.order.creditCard.slice(-4);
+    if (lastOrder.status === "idle") {
+      if (lastOrder.order.creditCard.length > 1) {
+        lastFour = lastOrder.order.creditCard.slice(-4);
+      }
     }
     
     //redirect to homepage when clicked, and OrderContext state is reset
@@ -80,14 +82,16 @@ const Confirmation = () => {
       history.push("/");
       afterPurchaseReset();
     }
-    
-    //show loading component while order is processing
-    if (status === "order-processing" || lastOrder.status === "loading") {
-        return <ItemLoader />;
-      } 
+
+    if ( status === "order-processing" || lastOrder.status === "loading") {
+      return <ItemLoader />;
+    }
 
     return (
       <PageWrapper>
+        
+        {( lastOrder.order &&
+        <>
         <h1>Thank you for your order!</h1>
 
         <Confirmwrapper>
@@ -105,9 +109,12 @@ const Confirmation = () => {
         </Confirmwrapper>
 
         <ReturnButton onClick={handleClick}>BACK TO ARMED BIRDS!</ReturnButton>
+        </>
+        )}
       </PageWrapper>
     );
-  };
+};
+
 
 const Confirmwrapper = styled.div`
   display: flex;
