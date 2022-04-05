@@ -5,26 +5,14 @@ import PageWrapper from "./PageWrapper";
 import ItemLoader from "./ShopPage/ItemLoader";
 import CartTable from "./Order/CartTable";
 
-// b3ce12ba-35d8-4f74-b8f6-09f41cd6aa4f
-
 const MyOrder = () => {
-  //set state for the input value
-  //   const [inputValue, setInputValue] = useState("");
-  //set states for the id, order and loading status
   const [orderId, setOrderId] = useState(null);
   const [order, setOrder] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState("idle"); //"loading", "done", "fetch-error"
   const [lastFour, setLastFour] = useState("");
 
-  //   const handleChange = (e) => {
-  //     // setInputValue(e.taget.value);
-  //     setOrderId(e.target.value);
-  //   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setOrderId(inputValue);
-    // console.log("id", orderId);
     setLoadingStatus("loading");
 
     fetch(`/get-order/${orderId}`, {
@@ -50,7 +38,7 @@ const MyOrder = () => {
         setLoadingStatus("fetch-error");
         setOrder(error);
       });
-    // setInputValue("");
+    setOrderId("");
   };
 
   return (
@@ -60,7 +48,7 @@ const MyOrder = () => {
         <StyledForm onSubmit={(e) => handleSubmit(e)}>
           <StyledInput
             type="text"
-            // value={inputValue}
+            value={orderId}
             required
             onChange={(e) => setOrderId(e.target.value)}
           />
@@ -72,7 +60,7 @@ const MyOrder = () => {
         {loadingStatus === "fetch-error" && (
           <>
             <StyledH3>
-              Order number: <span>{orderId}</span> not found.
+              Order number: <span>{order}</span> not found.
             </StyledH3>
             <StyledH3>Please contact customer services.</StyledH3>
           </>
@@ -83,7 +71,7 @@ const MyOrder = () => {
               This is your order according to your order number :
             </StyledH3>
             <StyledH3>
-              <span>{orderId}</span>
+              <span>{order._id}</span>
             </StyledH3>
             <Confirmwrapper>
               <Orderinfo>
