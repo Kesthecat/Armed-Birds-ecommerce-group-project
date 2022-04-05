@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
-const companies = require("./data/companies.json");
+const items = require("./data/items.json");
 const { MONGO_URI } = process.env;
 
 const options = {
@@ -13,11 +13,11 @@ const batchImport = async () => {
   try {
     await client.connect();
     const db = client.db("Ecommerce");
-    const result = await db.collection("Companies").insertMany(companies);
+    const result = await db.collection("Products").insertMany(items);
   } catch (err) {
     console.log("There was an error: ", err.message);
   }
   client.close();
 };
 
-batchImport();
+// batchImport();
