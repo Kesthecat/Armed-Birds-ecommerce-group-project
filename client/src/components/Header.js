@@ -5,35 +5,48 @@ import { OrderContext } from "./Order/OrderContext";
 import { MdOutlineShoppingBasket } from "react-icons/md";
 
 const Header = () => {
-  const { displayModal, setDisplayModal, selectedItems } =
+  const { setDisplayModal, selectedItems } =
     useContext(OrderContext);
 
+  //total number items in cart
   let itemsTally = 0;
   selectedItems.forEach(
     (item) => (itemsTally = itemsTally + Number(item.quantity))
   );
 
+  //display modal if cart button is clicked
   const handleClick = () => {
     setDisplayModal(true);
   };
 
   return (
     <HeaderContainer>
+
       <HeaderNavLink to="/">
         <img src="./Logo.png" alt="Armed-Bird" />
       </HeaderNavLink>
+
       <HeaderNav>
-        <Shop>
-          <HeaderNavLink to="/shop">Shop</HeaderNavLink>
-        </Shop>
-        <Brand>
-          <HeaderNavLink to="/brands">Brands </HeaderNavLink>
-        </Brand>
+
+        <PageLink>
+          <HeaderNavLink activeClassName="active" to="/shop">Shop</HeaderNavLink>
+        </PageLink>
+
+        <PageLink>
+          <HeaderNavLink activeClassName="active" to="/brands">Brands</HeaderNavLink>
+        </PageLink>
+
+        <PageLink>
+          <HeaderNavLink activeClassName="active" to="/order">My Order</HeaderNavLink>
+        </PageLink>
+
         <BasketWrapper onClick={handleClick}>
           <MdOutlineShoppingBasket size="30px" />
           <Tally>{itemsTally}</Tally>
         </BasketWrapper>
+
       </HeaderNav>
+
     </HeaderContainer>
   );
 };
@@ -60,6 +73,7 @@ const HeaderContainer = styled.div`
 const Tally = styled.span`
   font-weight: bold;
 `;
+
 const HeaderNav = styled.div`
   display: flex;
   justify-content: space-between;
@@ -73,12 +87,17 @@ const HeaderNavLink = styled(NavLink)`
   color: white;
   font-size: 25px;
 `;
-const Shop = styled.div`
+
+const PageLink = styled.div`
   margin-left: 30px;
   margin-right: 10px;
   color: white;
 
   &:hover {
+    color: var(--color-secondary);
+  }
+  
+  .active {
     color: var(--color-secondary);
   }
 `;
@@ -100,10 +119,4 @@ const BasketWrapper = styled.div`
     font-size: 25px;
     margin-top: 8px;
   }
-`;
-
-const Brand = styled.div`
-  display: flex;
-  margin-left: 30px;
-  margin-right: 10px;
 `;

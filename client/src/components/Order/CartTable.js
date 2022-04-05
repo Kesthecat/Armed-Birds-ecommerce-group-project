@@ -1,19 +1,19 @@
 import styled from "styled-components";
 import { useContext } from "react";
 import { OrderContext } from "./OrderContext";
+import NumberSelect from "./NumberSelect";
 
-//table of items in cart to display in cart and checkout components
+//table of the items in cart to display in the CartModal, Checkout, Confirmation, and MyOrder components
 const CartTable = ({itemArray, type}) => {
 
     //itemArray passed is the selectedItems array if using CartTable in CartModal or Checkout
-    //and itemArray is the itemsPurchased array from OrderContext if using on Confirmation page
+    //and itemArray is the products array in the order object fetched from the server if we are
+    //using CartTable in the Confirmation or MyOrder components 
     
-    const { selectedItems, setSelectedItems } = useContext(OrderContext);
+    //for setting the items in the cart
+    const { setSelectedItems } = useContext(OrderContext);
 
-    // if (type === "confirmation") {
-
-    // }
-
+    //handles deletion of an item in cart
     const handleDelete = (e) => {
 
         //get className of the DeleteDiv, which contains the itemId
@@ -21,27 +21,24 @@ const CartTable = ({itemArray, type}) => {
         //so we will use the last 4 digits, which is the itemId
         const className = e.target.className; 
         const itemId = className.slice(-4);
-        console.log("itemId", itemId);
 
         //filter itemArray array to remove the item
-        console.log("selected items before remove", itemArray)
-        console.log("typeof itemId", typeof itemId)
-        console.log("typoef item._id", )
         const removedArray = itemArray.filter((item) => {
             if (item._id !== Number(itemId)) {
-                console.log("typoef item._id", typeof item._id );
                 return item;
             }
         });
-        console.log("removedarray", removedArray);
-        setSelectedItems(removedArray);
 
+        //update the cart with the filtered array
+        setSelectedItems(removedArray);
     }
 
+    //if the itemArray is empty on the Confirmation page, don't render any content
     if (type === "confirmation" && (!itemArray || itemArray.length === 0)) {
         return <Wrapper></Wrapper>
     }
     
+    //if itemArray is empty in the CartModal or the Checkout Page, display empty cart message
     if (!itemArray || itemArray.length === 0) {
         return (
             <Wrapper>
@@ -54,9 +51,6 @@ const CartTable = ({itemArray, type}) => {
         <Wrapper>
 
             <Row className={(type !== "cart") ? "large" : ""} >
-                {/* {(type !== "confirmation" &&
-                    <HeaderDiv></HeaderDiv>
-                )} */}
                 <HeaderDiv></HeaderDiv>
                 <HeaderDiv></HeaderDiv>
                 <HeaderDiv><p>SKU</p></HeaderDiv>
@@ -102,25 +96,26 @@ const Wrapper = styled.div`
         font-size: 14px;
         padding: 5px;
     }
+
     .large{
         p{
             font-size: 20px;
         }
     }
 
-
     h4 {
         font-style: italic;
         text-align: center;
         width: 100%;
     }
-`
+`;
+
 const HeaderDiv = styled.div`
     p {
         font-weight: bold;
         font-size: 18px;
     }
-`
+`;
 
 const Row = styled.div`
     width: 100%;
@@ -132,7 +127,8 @@ const Row = styled.div`
     p {
         font-size: 15px;
     }
-`
+`;
+
 const DeleteDiv = styled.div`
         cursor: pointer;
         display: flex;
@@ -142,6 +138,6 @@ const DeleteDiv = styled.div`
         &:hover{
             color: var(--color-background);
         }
-`
+`;
 
 export default CartTable;

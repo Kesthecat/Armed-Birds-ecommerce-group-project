@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 const CartModal = () => {
     const history = useHistory();
 
+    //ref for the node so that we can trigger close of the modal when we click outside of it
     const nodeRef = useRef();
 
     const { displayModal, setDisplayModal, actions: { beginOrderProcess }} = useContext(OrderContext);
@@ -20,10 +21,12 @@ const CartModal = () => {
         return acc + priceNum * item.quantity;
     }, 0);
 
+    //when the close button X is clicked
     const handleClose = () => {
         setDisplayModal(false);
     }
 
+    //when the checkout button is clicked
     const handleClick = () => {
         beginOrderProcess();
         history.push("/checkout");
@@ -34,23 +37,24 @@ const CartModal = () => {
         if (event.target === nodeRef.current) {
             setDisplayModal(false);
         }
-        }
-        return (
-            <Modal isDisplay={displayModal} ref={nodeRef}>
-                <ModalContent>
-                    <CloseDiv>
-                        <CloseButton onClick={handleClose}>&times;</CloseButton>
-                    </CloseDiv>
-                    <h2>Your Cart</h2>
-                    <CartTable itemArray={selectedItems} type="cart"/>
+    }
+
+    return (
+        <Modal isDisplay={displayModal} ref={nodeRef}>
+            <ModalContent>
+                <CloseDiv>
+                    <CloseButton onClick={handleClose}>&times;</CloseButton>
+                </CloseDiv>
+                <h2>Your Cart</h2>
+                <CartTable itemArray={selectedItems} type="cart"/>
+
+                <Total>SUBTOTAL:  ${(Math.round(orderTotal*100)/100).toFixed(2)}</Total>
+
+                <Button onClick={handleClick} disabled={(selectedItems.length === 0)}>CHECKOUT</Button>
     
-                    <Total>SUBTOTAL:  ${(Math.round(orderTotal*100)/100).toFixed(2)}</Total>
-    
-                    <Button onClick={handleClick} disabled={(selectedItems.length === 0)}>CHECKOUT</Button>
-        
-                </ModalContent>
-            </Modal>
-        )
+            </ModalContent>
+        </Modal>
+    )
     }
     
     const Modal = styled.div`
@@ -69,7 +73,8 @@ const CartModal = () => {
             margin-bottom: 10px;
             color: var(--color-main);
         }
-    `
+    `;
+
     const ModalContent = styled.div`
         display: flex;
         flex-direction: column;
@@ -82,12 +87,13 @@ const CartModal = () => {
         width: 50vw;
         margin-left: 50vw;
         margin-top: 103px;
-    `
+    `;
+
     const CloseDiv = styled.div`
         display: flex;
         justify-content: flex-end;
         width: 100%;
-    `
+    `;
     
     const CloseButton = styled.span`
         cursor: pointer;
@@ -99,14 +105,15 @@ const CartModal = () => {
             color: var(--color-background);
         }
         
-    `
+    `;
+
     const Total = styled.h4`
         margin: 15px 0;
         font-size: 16px;
         text-align: right;
         width: 100%;
         margin-right: 50px;
-    `
+    `;
     
     const Button = styled.button`
         text-align: center;
@@ -118,8 +125,6 @@ const CartModal = () => {
         border-radius: 5px;
         margin: 10px 0;
         width: 140px;
-        cursor: pointer;
-
-    `
+    `;
     
     export default CartModal; 

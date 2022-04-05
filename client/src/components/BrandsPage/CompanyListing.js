@@ -4,8 +4,9 @@ import styled from "styled-components";
 import PageWrapper from "../PageWrapper";
 import { CompaniesContext } from "./CompaniesContext";
 
-//listing of all the brands in the shop
+//Listing of all the brands in the shop
 const CompanyListing = () => {
+  
   const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
   return (

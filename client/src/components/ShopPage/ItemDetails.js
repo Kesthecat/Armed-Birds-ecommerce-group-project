@@ -2,13 +2,14 @@ import styled from "styled-components";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { NavLink, useParams, useHistory } from "react-router-dom";
 import PageWrapper from "../PageWrapper";
-import { ProductsContext } from "./ProductsContext";
 import { OrderContext } from "../Order/OrderContext";
 import Dropdown from "./Dropdown";
 import ItemLoader from "./ItemLoader";
 
+//track loading of item details from state
+
 const initialState = {
-  itemStatus: "loading", //idle, fetch-failed
+  itemStatus: "loading", //other statuses: idle, fetch-failed
   companyStatus: "loading",
   company: null,
   item: null,
@@ -48,7 +49,7 @@ const reducer = (state, action) => {
   }
 };
 
-//item detail page
+//Item detail page
 const ItemDetails = () => {
   //array of selectedItems that is stored in session storage
   //has shape [{_id, name, price, quantity}]
@@ -58,7 +59,7 @@ const ItemDetails = () => {
   //state to keep track of quantity selected for purchase
   const [quantity, setQuantity] = useState(0);
 
-  //state and loading of item details
+  //track state and loading of Item details
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { id } = useParams();
@@ -67,6 +68,7 @@ const ItemDetails = () => {
 
   const dropdownArray = [];
 
+  //fetch item by id
   useEffect(() => {
     fetch(`/get-item/${id}`, {
       method: "GET",
@@ -76,12 +78,12 @@ const ItemDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("fetch item data", data, data.data);
         dispatch({
           type: "item-loaded-from-server",
           item: data.data,
         });
-        //FETCH BY COMPANY ID TO GET COMPANY NAME AND LINK
+
+        //fetch by company id to get name and link
         fetch(`/get-company/${data.data.companyId}`, {
           method: "GET",
           headers: {
@@ -90,7 +92,6 @@ const ItemDetails = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log("fetch campany data", data, data.name);
             dispatch({
               type: "company-loaded-from-server",
               company: data.data,
@@ -111,8 +112,8 @@ const ItemDetails = () => {
       });
   }, []);
 
+  //set options for the quantity dropdown
   if (state.itemStatus === "idle") {
-    console.log("state.item.numInStock", state.item.numInStock);
     for (let i = 0; i < state.item.numInStock; i++) {
       dropdownArray[i] = i + 1;
     }
@@ -122,7 +123,7 @@ const ItemDetails = () => {
   const handleClick = () => {
     const priceNum = Number(state.item.price.slice(1));
 
-    //if item is already in cart, then add new quantity
+    //if item is already in cart, then update the quantity instead of adding the same item again
     let index = null;
     const itemInCart = selectedItems.find((item, i) => {
       if (item._id === state.item._id) {
@@ -131,20 +132,16 @@ const ItemDetails = () => {
       }
     });
 
-    console.log("itemInCart", itemInCart)
-
     if (itemInCart) {
       itemInCart.quantity = Number(itemInCart.quantity) + Number(quantity);
-      console.log("itemInCart.quantity after", itemInCart.quantity);
   
       let newArr = [...selectedItems];
       newArr[index] = itemInCart;
-      console.log("newArr[index]", newArr[index]);
 
       setSelectedItems([...newArr]);
-      console.log("selectedItems after set", selectedItems)
     }
 
+    //else if the item is new, add the item object to the cart
     else {
       const currentItem = {
         _id: state.item._id,
@@ -157,15 +154,14 @@ const ItemDetails = () => {
       setSelectedItems([...selectedItems, currentItem]);
     }
 
-  
-
-    //display modal
+    //display the Cart Modal everytime an item is added to the cart
     setDisplayModal(true);
-    //history.push to shop page
+
+    //redirect to shop page after an item is added to the cart
     history.push("/shop");
   };
 
-  // will be replace with the loading component
+  //Loading component while fetches are being done 
   if (state.itemStatus === "loading" || state.companyStatus === "loading")
     return <ItemLoader />;
 
@@ -177,18 +173,24 @@ const ItemDetails = () => {
 
       {state.itemStatus === "idle" && state.companyStatus === "idle" && (
         <ProductCard>
+          
           <ImgDiv>
             <img src={state.item.imageSrc} width="350px" />
           </ImgDiv>
+          
           <InfoDiv>
+           
             <ProductName>{state.item.name}</ProductName>
+           
             <Company>
               Sold by:{" "}
               <StyledATag href={state.company.url} target="_blank">
                 {state.company.name}
               </StyledATag>
             </Company>
+            
             <Price>{state.item.price}</Price>
+            
             <Description>
               Wear it on your{" "}
               <span>{state.item.body_location.toLowerCase()}</span>!
@@ -202,15 +204,19 @@ const ItemDetails = () => {
             <InStock>
               {state.item.numInStock > 0 ? "In Stock" : "Out of Stock"}
             </InStock>
+
             <BuyButton
               onClick={handleClick}
               disabled={state.item.numInStock === 0 || quantity < 1}
             >
               BUY
             </BuyButton>
+          
           </InfoDiv>
+        
         </ProductCard>
       )}
+
     </PageWrapper>
   );
 };
@@ -222,6 +228,7 @@ const BackLink = styled.div`
   margin-left: 150px;
   width: 100%;
 `;
+
 const ProductCard = styled.div`
   display: flex;
   justify-content: space-evenly;

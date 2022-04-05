@@ -78,7 +78,6 @@ export default createGlobalStyle`
       background-color: var(--color-main);
       cursor: pointer;
       border-radius: 5px;
-
       transition: 0.1s ease-in-out;
     
       &:hover {

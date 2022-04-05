@@ -4,18 +4,22 @@ import { useContext } from "react";
 import { ProductsContext } from "./ProductsContext";
 import { CompaniesContext } from "../BrandsPage/CompaniesContext";
 
+//Sidebar on the shop page where user can choose filters which display as a clickable list below the select
 const ShopSidebar = () => {
 
+    //product and company data from context
     const { state: { status, products }, filter, setFilter, subfilter, setSubfilter } = useContext(ProductsContext);
     const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
+    //the filter options for the dropdown
     const filterOptions = [ "All", "Category", "Body Location", "Brand", "In Stock"];
-    //after filter selected, show list of the subfilters for that filter
     
+    //if displaying all, there are no subfilters to display
     if (filter === "All" || filter === null) {
         setSubfilter(null);
     }
 
+    //arrays of the subfilters for each filter category
     let uniqueCategories = [];
     let uniqueBodyLocations = [];
     let uniqueBrands = [];
@@ -28,13 +32,15 @@ const ShopSidebar = () => {
             return product.category;
         })
         
+        //array of just the unique category values
         uniqueCategories = [...new Set(categories)];
 
         //array of body locations
         const bodyLocations = products.map((product) => {
             return product.body_location;
         })
-        
+
+        //array of just the unique body locations
         uniqueBodyLocations = [...new Set(bodyLocations)];
     }
 
@@ -43,17 +49,17 @@ const ShopSidebar = () => {
         const brands = companies.map((company) => {
             return company.name;
         })
-        
+
+        //array of just the unique brand values
         uniqueBrands = [...new Set(brands)];
 
     }
 
+    //when a subfilter is clicked, get its name from the className and save it in state
     const handleClick = (e) => {
         const className = e.target.className; 
         setSubfilter(className);
-        console.log("subfilter in click", subfilter);
     }
-
 
     return (
         <Wrapper>
@@ -111,7 +117,7 @@ const Wrapper = styled.div`
 
 const DropdownDiv = styled.div`
    margin: 0 auto;
-`
+`;
 
 const List = styled.div`
     display: flex;
@@ -134,7 +140,6 @@ const List = styled.div`
         font-size: 18px;
         margin: 6px 10px 6px 20px;
     }
-
 `;
 
 export default ShopSidebar; 

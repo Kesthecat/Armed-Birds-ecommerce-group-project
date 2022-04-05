@@ -7,17 +7,17 @@ import styled from "styled-components";
 
 const Checkout = () => {
 
-    const {
-        state: { error, status },
-        actions: { cancelOrderProcess, orderRequested, orderFailure, 
-            orderSuccess }, selectedItems,
-            setDisplayModal, setLastOrderId
-        } = useContext(OrderContext);
-        
-    //shipping is a flat rate for now
-    const SHIPPING = 10.00;
+  const {
+      state: { error },
+      actions: { cancelOrderProcess, orderRequested, orderFailure, 
+          orderSuccess }, selectedItems,
+          setDisplayModal, setLastOrderId
+      } = useContext(OrderContext);
+      
+  //shipping is a flat rate for now
+  const SHIPPING = 10.00;
 
-    const history = useHistory();
+  const history = useHistory();
 
   //error state to keep track of errors in front end form validation
   const [formError, setFormError] = useState(null);
@@ -47,33 +47,39 @@ const Checkout = () => {
   //GST only
   let taxes = Number((0.05*subtotal).toFixed(2));
 
-
-  //close modal
+  //close CartModal if we enter Checkout
   setDisplayModal(false);
 
-  // discount handle
+  //discount codes -- these would be stored in the database for a deployment ready situation
   const discountCodes = [
     { code: "ARMED", reduction: 0.25 },
     { code: "SUMMER", reduction: 0.1 },
   ];
+
+  //handling when a user submits a discount
   const handleSubmitDiscount = (e) => {
     setDiscountMsg("");
     e.preventDefault();
 
+    //search to see if the code entered is valid
     const discountObj = discountCodes.find(
       (discount) => discount.code === discountCode
     );
+
     if (!discountObj) {
         setDiscountMsg("Discount not valid.");
         return;
     }
+
+    //set reduction and result message
     setDiscountedAmount((subtotal * discountObj.reduction)*-1);
     setDiscountMsg(`${discountCode} discount applied!`)
   };
 
+  //final order total
   let total = (Math.round((subtotal - discountedAmount + taxes + SHIPPING)*100)/100).toFixed(2);
 
-
+  //handling the submit of an order
   const handleSubmit = (e) => {
 
       e.preventDefault();
@@ -89,6 +95,7 @@ const Checkout = () => {
           return;
       }
 
+      //did not set shape for the credit card and expiration to make testing of the Checkout easier
       if (isNaN(+creditCard)) {
         setFormError("Credit card number must be in numerals, no spaces.")
           return;
@@ -113,7 +120,7 @@ const Checkout = () => {
                         "northwest territories", "nt", 
                         "nunavut", "nu"]
 
-    //check to see if customer has entered a complete Canadian address:
+    //We are only shipping to Canada so check to see if customer has entered a complete Canadian address:
     
     //check whether country code is valid 
     if ((country.toLowerCase().trim() !== 'canada' && country.toLowerCase().trim() !== 'ca')) {
@@ -146,7 +153,7 @@ const Checkout = () => {
         return;
     }
 
-    // array of products to purchase formatted to server expectation
+    // array of products to purchase to send to server
     let products = selectedItems.map((item) => { 
         return {
             productId: item._id, 
@@ -157,6 +164,7 @@ const Checkout = () => {
         }
     });
 
+    //order object to submit to server
     const newOrder = {
         products: products,
         firstName: firstName,
@@ -172,8 +180,10 @@ const Checkout = () => {
         grandTotal: total
     }
 
+    //update state of the order in OrderContext
     orderRequested();
 
+    //submit order
     fetch("/add-order", {
         method: "POST",
         body: JSON.stringify(newOrder),
@@ -185,36 +195,30 @@ const Checkout = () => {
         .then((res) => {
             return res.json()})
         .then((data) => {
-
-            console.log("order posted response", data)
-
+            //if posting order succeeds
             if (data.status === 200) {
-            
                 //keep this order id in session storage for the confirmation page
                 setLastOrderId(data.data._id);
+                
+                //reset order state and empty the cart
+                orderSuccess();
                 
                 //redirect to confirmation page
                 history.push("./confirmation");
                 
-                //reset order state and empty the cart
-                orderSuccess();
-                // console.log("itemsPurchased", itemsPurchased)
-
             }
-            //any other errors
+            //for any other non-500 errors, keep track of server message
             else {
                 orderFailure(data.message);
-                console.log("order failed", data.message)
             }
-
         })
         .catch((err) => {
-            console.log("500", err)
             orderFailure(err);
-
         })
   }
 
+  //if user clicks cancel order on Checkout page, they are redirected to 
+  //the Shop Page but the cart is still kept in session storage
   const handleCancelOrder = () => {
     cancelOrderProcess();
     history.push("/shop");
@@ -365,7 +369,7 @@ const StyledFormDiscount = styled.form`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    /* justify-content: center; */
+
     input {
         margin-left: 10px;
     }
@@ -393,31 +397,34 @@ const Styledform = styled.form`
   display: flex;
   gap: 50px;
 `;
+
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* border: 2px solid red; */
 `;
+
 const RightWrapper = styled.div`
-  /* border: 2px solid orange; */
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
+
 const Wrapper = styled.div`
   display: flex;
   gap: 15px;
-  /* border: 2px solid green; */
 `;
+
 const BtnWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
 const StyledInput = styled.input`
   font-size: 20px;
   height: 30px;
 `;
+
 const StyledH3 = styled.h3`
   font-size: 30px;
   margin-bottom: 20px;
@@ -430,10 +437,9 @@ const Message = styled.p`
     font-style: italic;
     font-weight: bold;
     height: 25px;
-`
+`;
 
 const ConfirmBtn = styled.button`
-
     text-align: center;
     font-size: 25px;
     font-family: var(--font-heading);
@@ -450,7 +456,6 @@ const CancelButton = styled.button`
     width: 200px;
     font-size: 18px;
     align-self: center;
-
-`
+`;
 
 export default Checkout;

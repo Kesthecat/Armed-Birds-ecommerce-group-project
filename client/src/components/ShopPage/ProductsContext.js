@@ -5,7 +5,7 @@ import { useEffect, useReducer, useState } from "react";
 export const ProductsContext = createContext(null);
 
 const initialState = {
-    status: "loading", //idle, fetch-failed
+    status: "loading", //other statuses: idle, fetch-failed
     products: null,
     error: null 
 }
@@ -32,12 +32,14 @@ const reducer = (state, action) => {
 
 export const ProductsContextProvider = ({children}) => {
 
+    //keep track of product loading state
     const [ state, dispatch ] = useReducer(reducer, initialState);
     
     //state to keep track of filters and subfilters selected for the ProductListing component
     const [filter, setFilter] = useState(null);
     const [subfilter, setSubfilter] = useState(null);
     
+    //fetch all products from server
     useEffect(() => {
   
         fetch("/get-items", { 
@@ -48,12 +50,9 @@ export const ProductsContextProvider = ({children}) => {
         })
         .then(res => res.json())
         .then((data) => {
-
-            console.log("fetch products data", data, data.data)
-
             dispatch ({
                 type: "products-loaded-from-server", 
-                products: data.data //verify what is being sent by server
+                products: data.data
             })
         })
         .catch((error) => {
