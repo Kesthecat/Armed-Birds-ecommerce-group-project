@@ -5,6 +5,7 @@ import { useContext, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import ItemLoader from "../ShopPage/ItemLoader";
 import { OrderContext } from "./OrderContext";
+import Errorpage from "../Errorpage";
 
 //tracking state for load of last order data
 
@@ -69,9 +70,14 @@ const Confirmation = () => {
       });
     }, [])
 
+    //if there is no last order stored in session storage, render 404 page
+    if (!lastOrderId) {
+      return <Errorpage />
+    }
+
     //last four digits of the credit card number for formatting
     let lastFour = "";
-    if (lastOrder.status === "idle") {
+    if (lastOrder.status === "idle" && lastOrderId) {
       if (lastOrder.order.creditCard.length > 1) {
         lastFour = lastOrder.order.creditCard.slice(-4);
       }
@@ -83,6 +89,7 @@ const Confirmation = () => {
       afterPurchaseReset();
     }
 
+    //if order is still processing, show the loading component
     if ( status === "order-processing" || lastOrder.status === "loading") {
       return <ItemLoader />;
     }
