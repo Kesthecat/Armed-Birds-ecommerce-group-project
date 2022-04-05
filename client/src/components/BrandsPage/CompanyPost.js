@@ -6,7 +6,7 @@ const CompanyPost = ({ name, url, country }) => {
     <Wrapper>
       <Info>
         <Name>{name}</Name>
-        <div><a href={url}>{url}</a></div>
+        <div><a href={url} target="_blank">{url}</a></div>
         <Country>{country}</Country>
       </Info>
     </Wrapper>
