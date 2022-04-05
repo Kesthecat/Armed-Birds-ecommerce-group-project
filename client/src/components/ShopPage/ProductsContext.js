@@ -35,9 +35,10 @@ export const ProductsContextProvider = ({children}) => {
     //keep track of product loading state
     const [ state, dispatch ] = useReducer(reducer, initialState);
     
-    //state to keep track of filters and subfilters selected for the ProductListing component
+    //state to keep track of filter and subfilter and sort selected for the ProductListing component
     const [filter, setFilter] = useState(null);
     const [subfilter, setSubfilter] = useState(null);
+    const [sort, setSort] = useState(null);
     
     //fetch all products from server
     useEffect(() => {
@@ -63,7 +64,9 @@ export const ProductsContextProvider = ({children}) => {
         })
     }, [])
 
-    return <ProductsContext.Provider value={{ state, filter, setFilter, subfilter, setSubfilter }}>
+    return <ProductsContext.Provider value={{ state, filter, setFilter, 
+                                            subfilter, setSubfilter, 
+                                            sort, setSort }}>
         {children}
         </ProductsContext.Provider>
 }
