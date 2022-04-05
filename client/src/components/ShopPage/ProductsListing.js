@@ -6,17 +6,19 @@ import ProductPreview from "./ProductPreview";
 import ProductsLoading from "./ProductsLoading";
 import { CompaniesContext } from "../BrandsPage/CompaniesContext";
 
-//grid of all the product preview cards, on the shop page
+//grid of all the ProductPreview cards, on the Shop page
 const ProductsListing = () => {
 
+    //get all the product and company data from contexts
     const { state: { status, products }, filter, subfilter } = useContext(ProductsContext);
     const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
+    //if fetch is still happening for the product and company data, show the loading component
     if (status === "loading" || companiesStatus === "loading") {
         return <ProductsLoading />;
     }
 
-    //array of products to display
+    //array of products to display -- by default, it is all the products
     let productsToRender = products;
 
     //product key -- as the filter terms are not the same strings as the keys in each product object
@@ -31,6 +33,7 @@ const ProductsListing = () => {
         key = "companyId"
     }
     
+    //if All is chosen or if no filter is applied
     if (filter === "All" || !filter) {
         productsToRender = products;
     }
@@ -46,11 +49,12 @@ const ProductsListing = () => {
         }
 
     }
+    //filter all the in stock products
     else if (filter === "In Stock") {
         productsToRender = products.filter((item) => item.numInStock > 0);
     }
     else {
-        //filter products by the filter/subfilter set
+        //filter products by the filter and subfilter combination
         productsToRender = products.filter((item) => item[`${key}`] === subfilter);
     }
 
@@ -72,19 +76,14 @@ const ProductsListing = () => {
     )
 }
 
-//might be better to use grid layout
 const Wrapper = styled.div`
     width: 75vw;
-
-    /* display: grid;
-    grid-template-columns: 1fr 1fr 1fr; */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     row-gap: 40px;
     column-gap: 40px;
     padding: 50px 0;
-    /* padding: 50px 100px; */
 `
 
 export default ProductsListing;

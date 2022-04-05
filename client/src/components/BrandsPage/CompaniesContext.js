@@ -5,7 +5,7 @@ import { useEffect, useReducer, useState } from "react";
 export const CompaniesContext = createContext(null);
 
 const initialState = {
-    companiesStatus: "loading", //idle, fetch-failed
+    companiesStatus: "loading", //other statuses: idle, fetch-failed
     companies: null,
     error: null 
 }
@@ -35,7 +35,6 @@ export const CompaniesContextProvider = ({children}) => {
     const [ state, dispatch ] = useReducer(reducer, initialState);
     
     useEffect(() => {
-  
         fetch("/get-companies", { 
             method: "GET", 
             headers: {
@@ -44,9 +43,6 @@ export const CompaniesContextProvider = ({children}) => {
         })
         .then(res => res.json())
         .then((data) => {
-
-            console.log("fetch companies data", data, data.data)
-
             dispatch ({
                 type: "companies-loaded-from-server", 
                 companies: data.data 

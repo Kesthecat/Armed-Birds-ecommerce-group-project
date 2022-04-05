@@ -1,6 +1,7 @@
 import { keyframes } from "styled-components";
 import styled from "styled-components";
 
+//loading animation used while ItemDetails and Confirmation Pages are loading
 const ItemLoader = () => {
   return (
     <LoadingDotDiv>

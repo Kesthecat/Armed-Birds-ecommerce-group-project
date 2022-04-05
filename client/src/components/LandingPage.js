@@ -39,7 +39,6 @@ const LandingPage = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log("fetch items list", data.data);
         setFeatureItems(data.data);
         setFeatureItemsStatus("idle");
       })
@@ -47,8 +46,6 @@ const LandingPage = () => {
         setFeatureItemsStatus("fetch-error");
       });
   }, []);
-
-  //   console.log("feature items", featureItems);
 
   if (featureItemsStatus === "loading") return <ItemLoader />;
   if (featureItemsStatus === "fetch-error") return <Errorpage />;

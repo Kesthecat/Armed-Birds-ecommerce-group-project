@@ -3,34 +3,37 @@ import PageWrapper from "../PageWrapper";
 import CartTable from "./CartTable";
 import { useContext, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
-import ProductsLoading from "../ShopPage/ProductsLoading";
+import ItemLoader from "../ShopPage/ItemLoader";
 import { OrderContext } from "./OrderContext";
 
-  const initialState = {
-      status: "loading", //idle, fetch-failed
-      order: null,
-      error: null,
-    };
+//tracking state for load of last order data
 
-    const reducer = (state, action) => {
-      switch (action.type) {
-        case "order-loaded-from-server": {
-          return {
-            ...state,
-            status: "idle",
-            order: action.order,
-          };
-        }
-        case "error-fetching-order-from-server": {
-          return {
-            ...state,
-            status: "fetch-failed",
-            error: action.error,
-          };
-        }
-      }
-    };
+const initialState = {
+    status: "loading", //idle, fetch-failed
+    order: null,
+    error: null,
+  };
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "order-loaded-from-server": {
+      return {
+        ...state,
+        status: "idle",
+        order: action.order,
+      };
+    }
+    case "error-fetching-order-from-server": {
+      return {
+        ...state,
+        status: "fetch-failed",
+        error: action.error,
+      };
+    }
+  }
+};
+
+//Confirmation Page component
 const Confirmation = () => {
 
   const {
@@ -38,53 +41,55 @@ const Confirmation = () => {
     state: { status },
     actions: { afterPurchaseReset },
   } = useContext(OrderContext);
-  console.log("last order", lastOrderId);
 
   const history = useHistory();
 
   const [lastOrder, dispatch] = useReducer(reducer, initialState);
 
   //fetch the last order by id from the server
-    useEffect(() => {
-        fetch(`/get-order/${lastOrderId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  useEffect(() => {
+      fetch(`/get-order/${lastOrderId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("fetch last order data", data, data.data);
-          dispatch({
-            type: "order-loaded-from-server",
-            order: data.data,
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: "error-fetching-order-from-server",
-            error: error,
-          });
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "order-loaded-from-server",
+          order: data.data,
         });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "error-fetching-order-from-server",
+          error: error,
+        });
+      });
     }, []);
 
+    //last four digits of the credit card number for formatting
     let lastFour = "";
     if (lastOrder.order) {
       lastFour = lastOrder.order.creditCard.slice(-4);
     }
     
+    //redirect to homepage when clicked, and OrderContext state is reset
     const handleClick = () => {
       history.push("/");
       afterPurchaseReset();
     }
     
+    //show loading component while order is processing
     if (status === "order-processing" || lastOrder.status === "loading") {
-        return <ProductsLoading />;
+        return <ItemLoader />;
       } 
 
     return (
       <PageWrapper>
         <h1>Thank you for your order!</h1>
+
         <Confirmwrapper>
           <Orderinfo><span>Order Number:</span> {lastOrder.order._id}</Orderinfo>
           <Orderinfo>
@@ -121,7 +126,6 @@ const Confirmwrapper = styled.div`
 const Orderinfo = styled.p`
   font-size: 20px;
   padding: 10px;
-  font-weight: bold;
 
   span {
     font-weight: bold;
@@ -135,5 +139,6 @@ const ReturnButton = styled.button`
     width: 400px;
     font-size: 18px;
     align-self: center;
-`
+`;
+
 export default Confirmation;

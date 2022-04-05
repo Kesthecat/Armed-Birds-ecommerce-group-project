@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
-//dropdown menu component, used for the quantity dropdown on the ItemDetails page
+//Reuseable dropdown menu component, used for the quantity dropdown on the ItemDetails page
+//and the shop filters on the Shop page
+
+//array contains the items to populate the dropdown, stateSetter is the state setting function that is used
+//to track the selected state of the dropdown, type is a prop used for styling, depending on whether the 
+//dropdown is used for the ItemDetails page or the Shop page
 const Dropdown = ({ array, label, stateSetter, type }) => {
   const handleSelect = (e) => {
     stateSetter(e.target.value);
-    console.log("selected qt", e.target.value);
   };
 
   return (
@@ -43,4 +47,5 @@ const Wrapper = styled.div`
     width: 125px;
   }
 `;
+
 export default Dropdown;

@@ -3,6 +3,7 @@ import ProductsListing from "./ProductsListing";
 import PageWrapper from "../PageWrapper";
 import ShopSidebar from "./ShopSidebar";
 
+//Shop page component, displaying all the products
 const Shop = () => {
 
     return (

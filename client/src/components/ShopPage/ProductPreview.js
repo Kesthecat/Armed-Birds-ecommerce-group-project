@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
 
-//product preview card, part of the product listing grid on the shop page
+//Product Preview card, part of the product listing grid on the shop page
 const ProductPreview = ({ imageSrc, name, price, type, soldOut}) => {
-    console.log("soldOut in product preview", soldOut);
 
     return (
         <Wrapper featured={(type === "featured")}>
@@ -31,10 +30,10 @@ const Wrapper = styled.div`
     background-color: var(--color-background); 
     border-radius: 5px;
     box-shadow: ${props => (props.featured ? "0 0 3px 3px var(--color-secondary)" : "")};
-`
+`;
+
 const SoldOutTag = styled.p`
     position: absolute;
-    /* transform: rotate(35deg); */
     top: 13px;
     right: 13px;
     text-align: right;
@@ -45,7 +44,7 @@ const SoldOutTag = styled.p`
     background: rgba(175, 112, 24, 0.3);
     padding: 8px;
     border-radius: 5px;
-`
+`;
 
 const ImgDiv = styled.div`
     display: flex;
@@ -60,7 +59,7 @@ const ImgDiv = styled.div`
     img {
         height: 160px;
     }
-`
+`;
 
 const Info = styled.div`
     display: flex;
@@ -68,21 +67,19 @@ const Info = styled.div`
     justify-content: center;
     align-items: center;
     color: var(--color-main);
-`
+`;
 
 const Name = styled.h4`
     font-weight: bold;
     text-align: center;
     margin: 20px 0 0 0;
     line-height: 1.3;
-    word-wrap: break-word;
-    
-`
+    word-wrap: break-word;  
+`;
 
 const Price = styled.p`
     text-align: center;
     margin: 10px 0 0 0;
-`
-
+`;
 
 export default ProductPreview;
