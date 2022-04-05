@@ -7,12 +7,18 @@ import { CompaniesContext } from "../BrandsPage/CompaniesContext";
 //Sidebar on the shop page where user can choose filters which display as a clickable list below the select
 const ShopSidebar = () => {
 
-    //product and company data from context
-    const { state: { status, products }, filter, setFilter, subfilter, setSubfilter } = useContext(ProductsContext);
+    //product and company data and functions from context
+    const { state: { status, products }, 
+            filter, setFilter, 
+            subfilter, setSubfilter, 
+            sort, setSort } = useContext(ProductsContext);
     const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
     //the filter options for the dropdown
     const filterOptions = [ "All", "Category", "Body Location", "Brand", "In Stock"];
+
+    //sort options for the dropdown
+    const sortOptions = ["None", "Price", "Name", "Most Stock", "Least Stock"];
     
     //if displaying all, there are no subfilters to display
     if (filter === "All" || filter === null) {
@@ -56,7 +62,7 @@ const ShopSidebar = () => {
     }
 
     //when a subfilter is clicked, get its name from the className and save it in state
-    const handleClick = (e) => {
+    const handleFilterClick = (e) => {
         const className = e.target.className; 
         setSubfilter(className);
     }
@@ -64,6 +70,7 @@ const ShopSidebar = () => {
     return (
         <Wrapper>
             <DropdownDiv>
+                <Dropdown array ={sortOptions} label="Sort by:" stateSetter={setSort} type="sidebar" />
                 <Dropdown array={filterOptions} label="Filter by:" stateSetter={setFilter} type="sidebar"/>
             </DropdownDiv>
 
@@ -75,7 +82,7 @@ const ShopSidebar = () => {
                         chosen = " chosen";
                     }
                     return <button key={cat} 
-                    onClick={handleClick} className={cat + chosen}>{cat}</button>
+                    onClick={handleFilterClick} className={cat + chosen}>{cat}</button>
                 })}
             </List>
             )}
@@ -88,7 +95,7 @@ const ShopSidebar = () => {
                         chosen = " chosen";
                     }
                     return <button key={loc} 
-                    onClick={handleClick} className={loc + chosen}>{loc}</button>
+                    onClick={handleFilterClick} className={loc + chosen}>{loc}</button>
                 })}
             </List>
             )}
@@ -101,7 +108,7 @@ const ShopSidebar = () => {
                         chosen = " chosen";
                     }
                     return <button key={brand} selected={(subfilter === brand)} 
-                    onClick={handleClick} className={brand + chosen}>{brand}</button>
+                    onClick={handleFilterClick} className={brand + chosen}>{brand}</button>
                 })}
             </List>
             )}
@@ -110,18 +117,26 @@ const ShopSidebar = () => {
 }
 
 const Wrapper = styled.div`
-    width: 18vw;
+    width: 16vw;
     padding-top: 160px;
     position: sticky;
 `;
 
 const DropdownDiv = styled.div`
-   margin: 0 auto;
+   padding-right: 0;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+
+   * {
+       margin: 5px 0;
+   }
 `;
 
 const List = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     margin-top: 20px;
     
     .chosen {
@@ -135,10 +150,12 @@ const List = styled.div`
         background-color: white;
         color: var(--color-main);
         border: none;
-        text-align: left;
         font-family: var(--font-subheading);
         font-size: 18px;
-        margin: 6px 10px 6px 20px;
+        margin: 6px 0;
+        text-align: right;
+
+
     }
 `;
 
