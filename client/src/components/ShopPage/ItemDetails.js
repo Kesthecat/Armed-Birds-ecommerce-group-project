@@ -123,16 +123,41 @@ const ItemDetails = () => {
     const priceNum = Number(state.item.price.slice(1));
 
     //if item is already in cart, then add new quantity
+    let index = null;
+    const itemInCart = selectedItems.find((item, i) => {
+      if (item._id === state.item._id) {
+        index = i;
+        return item;
+      }
+    });
 
-    const currentItem = {
-      _id: state.item._id,
-      imageSrc: state.item.imageSrc,
-      name: state.item.name,
-      price: state.item.price,
-      quantity: quantity,
-      itemTotal: (priceNum * quantity).toFixed(2),
-    };
-    setSelectedItems([...selectedItems, currentItem]);
+    console.log("itemInCart", itemInCart)
+
+    if (itemInCart) {
+      itemInCart.quantity = Number(itemInCart.quantity) + Number(quantity);
+      console.log("itemInCart.quantity after", itemInCart.quantity);
+  
+      let newArr = [...selectedItems];
+      newArr[index] = itemInCart;
+      console.log("newArr[index]", newArr[index]);
+
+      setSelectedItems([...newArr]);
+      console.log("selectedItems after set", selectedItems)
+    }
+
+    else {
+      const currentItem = {
+        _id: state.item._id,
+        imageSrc: state.item.imageSrc,
+        name: state.item.name,
+        price: state.item.price,
+        quantity: quantity,
+        itemTotal: (priceNum * quantity).toFixed(2),
+      };
+      setSelectedItems([...selectedItems, currentItem]);
+    }
+
+  
 
     //display modal
     setDisplayModal(true);
@@ -206,6 +231,9 @@ const ProductCard = styled.div`
 
 const ImgDiv = styled.div`
   margin: 0 auto;
+  padding: 15px;
+  border: 3px solid var(--color-secondary);
+  border-radius: 5px;
 `;
 
 const InfoDiv = styled.div`
@@ -236,6 +264,7 @@ const Price = styled.h4`
 
 const Description = styled.p`
   margin: 10px 0;
+  font-weight: 100;
   span {
     font-style: italic;
   }

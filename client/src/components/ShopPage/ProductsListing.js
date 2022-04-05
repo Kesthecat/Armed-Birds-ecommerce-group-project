@@ -46,6 +46,9 @@ const ProductsListing = () => {
         }
 
     }
+    else if (filter === "In Stock") {
+        productsToRender = products.filter((item) => item.numInStock > 0);
+    }
     else {
         //filter products by the filter/subfilter set
         productsToRender = products.filter((item) => item[`${key}`] === subfilter);
@@ -58,7 +61,8 @@ const ProductsListing = () => {
             {productsToRender.map((product) => {
                 return (
                     <NavLink to={`/shop/${product._id}` } key={product._id} >
-                        <ProductPreview imageSrc={product.imageSrc} name={product.name} price={product.price} />
+                        <ProductPreview imageSrc={product.imageSrc} name={product.name} price={product.price} 
+                        type="listing" soldOut={(product.numInStock === 0)}/>
                     </NavLink>
                     )
             })}
@@ -71,12 +75,16 @@ const ProductsListing = () => {
 //might be better to use grid layout
 const Wrapper = styled.div`
     width: 75vw;
+
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr; */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     row-gap: 40px;
     column-gap: 40px;
     padding: 50px 0;
+    /* padding: 50px 100px; */
 `
 
 export default ProductsListing;

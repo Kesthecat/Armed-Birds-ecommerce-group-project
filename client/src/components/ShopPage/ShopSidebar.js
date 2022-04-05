@@ -9,7 +9,7 @@ const ShopSidebar = () => {
     const { state: { status, products }, filter, setFilter, subfilter, setSubfilter } = useContext(ProductsContext);
     const { state: { companiesStatus, companies } } = useContext(CompaniesContext);
 
-    const filterOptions = [ "All", "Category", "Body Location", "Brand"];
+    const filterOptions = [ "All", "Category", "Body Location", "Brand", "In Stock"];
     //after filter selected, show list of the subfilters for that filter
     
     if (filter === "All" || filter === null) {
@@ -51,20 +51,25 @@ const ShopSidebar = () => {
     const handleClick = (e) => {
         const className = e.target.className; 
         setSubfilter(className);
-        console.log(subfilter);
+        console.log("subfilter in click", subfilter);
     }
 
 
     return (
         <Wrapper>
             <DropdownDiv>
-                <Dropdown array={filterOptions} label="Filter by:" stateSetter={setFilter} />
+                <Dropdown array={filterOptions} label="Filter by:" stateSetter={setFilter} type="sidebar"/>
             </DropdownDiv>
 
             {( status === "idle" && filter === "Category" && 
             <List>
                 {uniqueCategories.map((cat) => {
-                    return <button key={cat} className={cat} selected={(filter === cat)} onClick={handleClick} >{cat}</button>
+                    let chosen = "";
+                    if (subfilter === cat) {
+                        chosen = " chosen";
+                    }
+                    return <button key={cat} 
+                    onClick={handleClick} className={cat + chosen}>{cat}</button>
                 })}
             </List>
             )}
@@ -72,7 +77,12 @@ const ShopSidebar = () => {
             {( status === "idle" && filter === "Body Location" && 
             <List>
                 {uniqueBodyLocations.map((loc) => {
-                    return <button key={loc} selected={(filter === loc)} onClick={handleClick} className={loc}>{loc}</button>
+                    let chosen = "";
+                    if (subfilter === loc) {
+                        chosen = " chosen";
+                    }
+                    return <button key={loc} 
+                    onClick={handleClick} className={loc + chosen}>{loc}</button>
                 })}
             </List>
             )}
@@ -80,19 +90,23 @@ const ShopSidebar = () => {
             {( companiesStatus === "idle" && status === "idle" && filter === "Brand" && 
             <List>
                 {uniqueBrands.map((brand) => {
-                    return <button key={brand} selected={(filter === brand)} onClick={handleClick} className={brand}>{brand}</button>
+                    let chosen = "";
+                    if (subfilter === brand) {
+                        chosen = " chosen";
+                    }
+                    return <button key={brand} selected={(subfilter === brand)} 
+                    onClick={handleClick} className={brand + chosen}>{brand}</button>
                 })}
             </List>
             )}
         </Wrapper>
     )
-
-
 }
 
 const Wrapper = styled.div`
     width: 18vw;
     padding-top: 160px;
+    position: sticky;
 `;
 
 const DropdownDiv = styled.div`
@@ -104,6 +118,13 @@ const List = styled.div`
     flex-direction: column;
     margin-top: 20px;
     
+    .chosen {
+            text-decoration: underline;
+            text-underline-position: under; 
+            font-weight: bold;
+            color: var(--color-secondary);
+        }
+
     button {
         background-color: white;
         color: var(--color-main);
@@ -112,10 +133,6 @@ const List = styled.div`
         font-family: var(--font-subheading);
         font-size: 18px;
         margin: 6px 10px 6px 20px;
-        text-decoration: ${props => (props.selected ? "underline" : "none")};
-        font-weight: ${props => (props.selected ? "bold" : "400")};
-        color: ${props => (props.selected ? "red" : "green")};
-
     }
 
 `;
